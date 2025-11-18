@@ -1475,6 +1475,167 @@ Selective repeat: K = 2W + 1
 
 ---
 
+## Lecture 10: IoT - Part 1 (Guest Lecture)
+
+### IoT Four-Layer Architecture
+**Critical for Understanding IoT Systems**:
+
+1. **Device Layer (The Things)**:
+   - Smart sensors (temperature, light, motion)
+   - Smart actuators (displays, sound, motors)
+   - Computation capability (can run programs)
+   - Communication interfaces (wired/wireless)
+
+2. **Network Layer**:
+   - WPAN, WLAN, WMAN (short/medium range)
+   - Cellular networks (long range)
+   - Internet backbone
+
+3. **Data Analytics Layer**:
+   - ML/AI algorithms
+   - Historical data analytics
+   - Streaming data analytics
+   - Cloud storage
+
+4. **Application Layer**:
+   - Decision making
+   - Dashboards, web services
+   - Augmented reality
+
+### IoT Hardware Components
+
+**IoT Boards**:
+- **Microcontroller Boards** (e.g., Arduino):
+  - System on Chip (SoC) with processing cores, RAM, EPROM
+  - Executes custom programs on microcontroller
+
+- **Single Board Computers** (e.g., Raspberry Pi):
+  - Complete computer on single circuit board
+  - Fan-less, low-power, low-profile architecture
+
+**Sensor Node (Mote) Architecture**:
+- **Key Components**:
+  - Microcontroller (processing/sampling)
+  - Data SRAM (critical limiting resource)
+  - Flash storage (program images, data logs)
+  - Sensor Interface (ADC for analog, digital sensors)
+  - Wireless/Wired Network Interface
+  - Low-power standby & wakeup capability
+
+### Power Consumption (EXAM CRITICAL)
+
+**Power Consumption Model**:
+- Sleep – Active [Wakeup / Work] cycle
+- **Average Power**: P_ave = f_sleep × P_sleep + f_wakeup × P_wakeup + f_work × P_work
+- **Lifetime**: EnergyStore / (P_ave - P_generated)
+
+**General Design Guideline**:
+- Switch off Radio (TX/RX/IDLE) "as soon as possible"
+- Radio power consumption roughly same for TX, RX, or IDLE listening
+- **Total energy dominated by idle listening**
+
+**Power Spending Factors**:
+1. **Duty Cycle**: How often devices are on
+2. **Protocol Efficiency**: What they do when on
+3. **TX Power**: How much power they transmit (and amplifier efficiency)
+4. **Transmission Duration**: Data rate affects energy per bit
+5. **Signal Processing**: DSP or RF dominated
+
+**Example Power Values (802.11 PSM)**:
+- TX: 700-1100 mW
+- RX: 170-350 mW
+- Idle: 66-92 mW
+- Sleep: 13-142 μW
+
+### Wireless Technologies for IoT
+
+**Communications Criteria**:
+1. **Range**: Signal propagation distance
+2. **Frequency Bands**: Licensed vs unlicensed, sub-GHz
+3. **Power Consumption**: Stable power vs battery
+4. **Topology**: Network layouts for connecting objects
+5. **Constrained Devices**: Connectivity limitations
+6. **Constrained-Node Networks**: Network challenges
+
+**Network Architectures**:
+- **Mobile Radio Networks** (Cellular: 2G-5G)
+- **Capillary Multi-hop Networks** (Short/medium range + backhauling)
+- **Low Power Wide Area Networks (LPWAN)**
+
+**Technology Comparison (Key Parameters)**:
+
+| Technology | Range | Data Rate | Power | Spectrum | Latency |
+|------------|-------|-----------|-------|----------|---------|
+| **Wi-Fi** | ~100m | 100+ Mbps | High | Unlicensed 2.4/5 GHz | Low |
+| **Wi-Fi HaLow** | ~1km | Few kbps | Low | Unlicensed sub-1 GHz | 1.6-10s |
+| **Bluetooth LE** | ~100m | 1-10 Mbps | Low | Unlicensed 2.4 GHz | Low |
+| **ZigBee** | ~100m | 250 kbps | Low | Unlicensed 2.4 GHz | Low |
+| **LoRaWAN** | 2-5km urban, 15km rural | 50-290 bps | Very Low | Unlicensed sub-1 GHz | High |
+| **NB-IoT** | 10-15km | 20-200 kbps | Low | Licensed | 1.6-10s |
+| **LTE-M** | 7-10km | <1 Mbps | Low | Licensed in-band | 10-15ms |
+| **EC-GSM** | <25km | 240 kbps | Low | Licensed GSM | 700ms-2s |
+
+### Wi-Fi Power Saving Modes
+
+**Active Mode**: Radio always on (high power)
+
+**Legacy PS Mode (PS-Poll)**:
+- Station sleeps between beacons
+- Wakes up to receive beacon
+- Sends PS-Poll if data buffered at AP
+- Significant power savings with increased latency
+
+**Tradeoff**: Latency vs. Power Saving
+
+### Interference at 2.4 GHz (Important)
+
+**Wi-Fi vs ZigBee**:
+- Operate on same band
+- Wi-Fi typically 100x more power (100 mW vs 1 mW)
+- Some ZigBee channels avoid Wi-Fi spectrum (channels 25, 26)
+
+**BLE vs Wi-Fi**:
+- BLE advertising channels (37, 38, 39) avoid 802.11 channels 1, 6, 11
+- 9 data channels still available for BLE
+
+### Energy Calculations (Practice This!)
+
+**Energy Definition**: Current (A) × Voltage (V) × Time (s) = Power (W) × Time (s)
+
+**Example Calculation**:
+- Battery: 180 mAh, 1.5V → Energy = 180×10⁻³ × 3600 × 1.5 = 972 J
+- TX Power: 15 mW, Duration: 3 ms → Energy per TX = 15×10⁻³ × 3×10⁻³ = 45 μJ
+- Number of transmissions: 972 / (45×10⁻⁶) = 21.6 million
+- Lifetime (1 TX/min): 21.6×10⁶ minutes ≈ 15,000 days ≈ 40 years
+
+### IoT Protocol Stack
+
+**Messaging Protocols** (Application Layer):
+- MQTT (publish-subscribe, TCP-based)
+- CoAP (request-response, UDP-based, lightweight)
+- AMQP (message queuing)
+- HTTP (web-based, heavier)
+
+**Transport**: TCP (reliable) / UDP (lightweight)
+**Network**: IPv4, IPv6, 6LoWPAN (IPv6 over Low-Power networks)
+**PHY/MAC**: IEEE 802.3, 802.11, 802.15.4, 802.15.1 (BLE), others
+
+**Why New Stack Needed**:
+- Traditional HTTP/FTP/SNMP too heavy for constrained devices
+- TCP/UDP overhead undesirable for low-power
+- Need tight coupling with PHY for energy efficiency
+- Routing needed for tiny disconnected devices
+
+### Key Exam Topics
+- Understand 4-layer IoT architecture and role of each layer
+- Know power consumption models and how to calculate device lifetime
+- Understand why idle listening dominates energy consumption
+- Compare wireless technologies (range, data rate, power, spectrum)
+- Understand interference issues at 2.4 GHz
+- Know Wi-Fi power saving modes and tradeoffs
+- Be able to perform energy/lifetime calculations
+- Understand why traditional protocols are unsuitable for IoT
+- Know differences between LPWAN technologies (LoRa, NB-IoT, LTE-M)
 ## Lecture 10: IoT Part 2 (Application Layer Protocols & Platforms)
 
 ### MQTT Protocol (Message Queuing Telemetry Transport)
