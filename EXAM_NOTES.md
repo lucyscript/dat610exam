@@ -150,7 +150,6 @@ Each lecture has specific learning questions that guide exam preparation:
 ---
 
 ## Lecture 6: Cellular Networks
-*[TO BE COMPLETED]*
 
 ### Key Learning Questions (Part 1):
 - Principles of cellular networks?
@@ -168,6 +167,152 @@ Each lecture has specific learning questions that guide exam preparation:
 - Enabling technologies of 5G?
 - How can 5G be deployed?
 - New challenges in 5G?
+
+---
+
+### Part 3: 5G RAN Deployment and Orchestration (EXAM CRITICAL)
+
+#### RAN Architecture Components
+**Key Terminology**:
+- **RU (Radio Unit)**: Handles radio frequency transmission/reception
+- **DU (Distributed Unit)**: Processes lower-layer protocols (real-time)
+- **CU (Central Unit)**: Processes higher-layer protocols (non-real-time)
+- **BBU (BaseBand Unit)**: Unit that processes baseband signals
+- **RRU (Remote Radio Unit)**: Remote radio unit separated from BBU
+
+**Network Segments**:
+- **Fronthaul**: Connection between RU and DU
+- **Midhaul**: Connection between DU and CU (F1 interface)
+- **Backhaul**: Connection between CU and 5G Core (NG interface)
+
+#### 5G RAN Deployment Scenarios (VERY IMPORTANT)
+
+1. **Independent RRU, CU, and DU locations**
+   - All components separated
+   - Maximum flexibility but complex connectivity
+   - Fronthaul → DU → Midhaul → CU → Backhaul → 5GC
+
+2. **RU and DU Integration**
+   - RU and DU co-located
+   - Simplifies fronthaul
+   - Midhaul → CU → Backhaul → 5GC
+
+3. **Co-located CU and DU**
+   - BBU contains both CU and DU
+   - Remote RU (RRU)
+   - Fronthaul → BBU → Backhaul → 5GC
+
+4. **RRU, DU, and CU Integration**
+   - Fully integrated basestation
+   - Simplest deployment
+   - Direct Backhaul → 5GC
+   - Similar to traditional architecture
+
+**Common Arrangement**: BBU containing both CU and DU functionality, with one or more RUs (collocated or remote RRUs)
+
+#### Key Challenges in 5G (EXAM TOPIC)
+
+**Primary Challenge**: Need for **intelligence to manage and orchestrate complexity**
+- 5G networks are highly complex with many components
+- Dynamic resource allocation required
+- AI/ML needed for automation and optimization
+
+#### Resource Orchestration (CRITICAL CONCEPT)
+
+**Three Resource Categories**:
+
+1. **Data Resources**:
+   - Computing resources (processing power)
+   - Storage resources (data storage capacity)
+
+2. **Network Resources**:
+   - Interconnectivity (transport network capacity)
+   - Access (radio access network resources)
+
+3. **User Mobility**:
+   - Handoff management
+   - Service continuity across cells
+
+**Three Key Requirements** (Know these well):
+
+1. **Security** 🔒
+   - Protect against unauthorized access
+   - Secure data and network resources
+   - Critical for multi-tenant environments
+
+2. **Dependability** 💎
+   - Reliability (correct operation)
+   - Availability (service uptime)
+   - Resilience to failures
+
+3. **Performance** 🚀
+   - Low latency
+   - High throughput
+   - Efficient resource utilization
+
+#### How 5G Can Be Deployed (Answer to Learning Question)
+
+Based on deployment scenarios:
+- **Centralized deployment**: CU/DU at central location, RRUs distributed
+- **Distributed deployment**: Independent RU, DU, CU locations for flexibility
+- **Integrated deployment**: Full integration at cell sites
+- **Hybrid deployment**: Mix of above based on requirements
+
+**Trade-offs**:
+- Centralized: Better resource sharing, more complex transport
+- Distributed: Maximum flexibility, higher complexity
+- Integrated: Simpler, less flexible for optimization
+
+#### New Challenges in 5G (Answer to Learning Question)
+
+1. **Complexity Management**
+   - Multiple deployment options
+   - Dynamic network topologies
+   - Heterogeneous technologies
+
+2. **Orchestration and Automation**
+   - Need AI/ML for intelligent resource allocation
+   - Dynamic service placement
+   - Multi-access edge computing (MEC)
+
+3. **Meeting Requirements Simultaneously**
+   - Security AND performance
+   - Dependability AND flexibility
+   - Cost efficiency AND quality
+
+4. **Network Slicing**
+   - Isolation between slices
+   - Resource allocation per slice
+   - Security per slice
+
+5. **Edge Computing Integration**
+   - Placing compute at network edge
+   - Service migration
+   - Latency requirements
+
+---
+
+### Exam Preparation Notes for Lecture 6 Part 3:
+
+**High-Probability Exam Questions**:
+1. Explain the different 5G RAN deployment scenarios and their trade-offs
+2. What are the three key requirements for resource orchestration in 5G?
+3. Describe the main challenges in 5G networks
+4. Explain the difference between fronthaul, midhaul, and backhaul
+5. What resources need to be orchestrated in 5G? (data, network, user mobility)
+
+**Key Points to Remember**:
+- RU/DU/CU architecture provides flexibility in 5G deployment
+- Four main deployment scenarios from fully distributed to fully integrated
+- Orchestration requires balancing security, dependability, and performance
+- Intelligence (AI/ML) needed to manage 5G complexity
+- Resources span computing, storage, connectivity, and mobility
+
+**Terminology to Master**:
+- RU, DU, CU, BBU, RRU
+- Fronthaul, Midhaul, Backhaul
+- Orchestration, MEC (Multi-access Edge Computing)
+- Network slicing
 
 ---
 
