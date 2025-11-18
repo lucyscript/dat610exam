@@ -861,7 +861,223 @@ Selective repeat: K = 2W + 1
 ---
 
 ## Lecture 6: Cellular Networks
-*[TO BE COMPLETED]*
+
+### Principles of Cellular Networks
+
+**Core Concept**: Low-power (<100W) systems with shorter radius (<20km) using numerous transmitters/receivers to increase capacity for mobile radio telephone services.
+
+**Advantages**:
+- **Frequency reuse**: Better utilization of wireless resources and higher capacity
+- **Lower power requirements**: Smaller devices and longer-lasting batteries
+- Single-hop, infrastructured architecture
+
+**Cell Organization**:
+- **Hexagonal cells** provide equidistant antennas (ideal pattern)
+- **Square cells** are simpler but geometry not ideal
+- In practice: variations due to antenna design, topographical limitations, local signal propagation
+
+**Frequency Reuse**:
+- **No same frequency in adjacent cells** (to avoid interference)
+- **Reuse factor N**: Number of cells in a cluster (e.g., N=7)
+- Minimum separation required between cells using same frequency
+
+**Increasing Capacity Methods**:
+1. **Adding new channels** (given unused channels)
+2. **Frequency borrowing** (from adjacent cells)
+3. **Cell Splitting** (splitting into smaller cells in high-traffic areas)
+4. **Cell Sectoring** (dividing cell into sectors - see triangular antennas)
+5. **Network Densification** (Femtocell → Picocell → Macrocell, self-organizing networks)
+6. **Inter-Cell Interference Coordination (ICIC)** and Coordinated Multipoint Transmission
+
+---
+
+### Operation of Cellular Systems
+
+**Key Elements**:
+- **Base Station (BS)**: Radio Tx/Rx to/from User Equipment (UE)
+- **Air interface**: Wireless interface between BS and UE
+- **MTSO** (Mobile Telecommunication Switching Office): Call origination/termination
+- **RAN** (Radio Access Network): Network between BSs and core network
+- **Core Network**: Provides networking services
+
+**Channel Types**:
+- **Control channels**: Information exchange to set up and manage connections
+- **Traffic channels**: Transport voice or data between users
+
+**Call Procedure** (6 steps):
+1. **Mobile unit initialization**: Scan/select strongest control channel, handshake with MTSO
+2. **Mobile-originated call**: Send called number on control channel to BS → MTSO
+3. **Paging**: MTSO sends paging message to certain BSs based on last known location
+4. **Call accepted**: Called unit responds, MTSO sets up circuit and selects traffic channels
+5. **Ongoing call**: Connection maintained
+6. **Handoff**: Seamless traffic channel change when moving to new BS coverage area
+
+**Other Functions**: Call termination, call drop, fixed/remote calls, emergency prioritization
+
+---
+
+### Evolution of Cellular Networks
+
+**Technology Timeline**:
+| Generation | Deployment | Download Speed | Latency | Air Interface | Core Network | Primary Service |
+|------------|-----------|----------------|---------|---------------|--------------|-----------------|
+| **1G** | 1980s | 2 kbit/s | N/A | Analog | Circuit switching | Analog voice calls |
+| **2G** | 1990s | 384 kbit/s | 629 ms | Digital, TDMA, CDMA | Circuit switching, packet switching | Digital calls, SMS, basic Internet |
+| **3G** | 2000s | 2 Mbit/s | 212 ms | WCDMA, CDMA2000 | Packet switching, IP | Mobile broadband, smartphones |
+| **4G** | 2010s | 1 Gbit/s | 60-98 ms | OFDM, OFDMA, MIMO | IP | Fast mobile broadband, high-speed Internet, IoT |
+| **5G** | 2020s | >1 Gbps | <1 ms | AAS, FD-MIMO | IP | eMBB, mMTC, URLLC |
+
+**Intermediate Generations**:
+- **2G+**: GPRS (171.2 kbps), EDGE (600-750 kbps)
+- **3G+**: HSDPA (1.8-14.4 Mbps), HSUPA (5.76 Mbps), HSPA+ (21-336 Mbps)
+- **4G**: LTE (Release 8-9), LTE-Advanced (Release 10-12), LTE-Advanced Pro (Release 13+)
+
+**3GPP Release Timeline**:
+- **3G**: Release 99, Releases 4-7
+- **4G**: Releases 8-14
+- **5G**: Releases 15+ (Release 15: 2018, Release 16: 2020, Release 17: 2022, Release 18-19: ongoing)
+
+---
+
+### 4G/LTE Architecture
+
+**LTE Architecture Components**:
+
+**E-UTRAN (Evolved UTRAN)**:
+- Consists of several **eNodeBs** (Evolved NodeB)
+- eNodeBs embed their own control functionality
+- Direct communication between eNodeBs (unlike UMTS)
+- Use of Relay Nodes
+
+**EPC (Evolved Packet Core)**:
+- **MME** (Mobility Management Entity): Authentication, SGSN selection at 2G/3G handovers, resource allocation, mobility management
+- **S-GW** (Serving Gateway): Interconnection between E-UTRAN and EPC, packet routing/forwarding, mobility anchor
+- **P-GW** (PDN Gateway): Routing point to external Packet Data Network
+- **HSS** (Home Subscriber Server): Subscriber information
+
+**UE (User Equipment)**:
+- ME (Mobile Equipment) + USIM (Universal SIM)
+
+**Key Features**:
+- **Air Interface**: OFDM/MIMO, DL: OFDMA, UL: SC-FDMA, both FDD and TDD
+- **Carrier Aggregation**: Intra-band contiguous, intra-band non-contiguous, inter-band non-contiguous
+- **Resource Management**: Bearer-based (GBR/Non-GBR), QoS Class Identifiers (QCI)
+- **Radio Resource Allocation**: Resource Grid → Resource Elements → Resource Blocks
+
+**LTE Evolution**:
+| Version | 3GPP Release | LTE Category | Max Download | Carrier Aggregation | Carrier BW | Latency | MIMO | QAM |
+|---------|--------------|--------------|--------------|---------------------|------------|---------|------|-----|
+| **LTE** | Rel.8-9 | CAT1-5 | 150Mbps | 0 | 10MHz | 100ms | 2 | 64 |
+| **LTE-A** | Rel.10-12 | CAT6-16 | 1Gbps | Up to 5 | 100MHz | 10ms | 8 | 64 |
+| **LTE-A Pro** | Rel.13+ | CAT17-19 | 3Gbps | Up to 32 (LAA, LWA) | 640MHz | 2ms | 32 | 256 |
+
+---
+
+### 5G Use Scenarios
+
+**Three Main Scenarios** (ITU IMT-2020):
+
+**1. eMBB (Enhanced Mobile Broadband)**:
+- **Focus**: Peak data rate, user experienced data rate
+- **Requirements**: High data rates, area traffic capacity
+- **Use Cases**: 3D video, UHD screens, work/play in cloud, AR/VR, gigabytes in a second
+
+**2. mMTC (Massive Machine-Type Communication)**:
+- **Focus**: Connection density, network energy efficiency
+- **Requirements**: Support for massive number of devices
+- **Use Cases**: Smart city, smart home/building, massive IoT sensors
+
+**3. URLLC (Ultra-Reliable Low-Latency Communication)**:
+- **Focus**: Latency, reliability, mobility
+- **Requirements**: <1ms latency, 1-10^-8 reliability
+- **Use Cases**: Industry automation, mission-critical applications, self-driving cars, remote surgery
+
+**Key Performance Improvements vs 4G**:
+- **Peak data rate**: 20 Gbps (100x improvement)
+- **User experienced data rate**: 100 Mbps - 1 Gbps
+- **Latency**: <1 ms (10x improvement)
+- **Mobility**: Up to 500 km/h
+- **Connection density**: 10^6 devices/km²
+- **Energy efficiency**: 100x improvement
+- **Area traffic capacity**: 10 Mbps/m²
+- **Spectrum efficiency**: 3x improvement
+
+---
+
+### 6G Vision (IMT-2030)
+
+**Framework Recommendation**: ITU-R M.2160 (November 2023)
+
+**Six Usage Scenarios**:
+1. **Immersive Communication** (extension of eMBB)
+2. **Massive Communication** (extension of mMTC)
+3. **HRLLLC** - Hyper Reliable & Low-Latency Communication (extension of URLLC)
+4. **Ubiquitous Connectivity** (NEW)
+5. **AI and Communication** (NEW)
+6. **Integrated Sensing and Communication** (NEW)
+
+**Four Overarching Aspects** (design principles for all scenarios):
+- Sustainability
+- Connecting the unconnected
+- Ubiquitous intelligence
+- Security and resilience
+
+**Key Capabilities (Palette Diagram)**:
+- **Enhanced from 5G**: Peak data rate, user experienced data rate, spectrum efficiency, area traffic capacity, mobility (500-1000 km/h), latency (0.1-1 ms), reliability (1-10^-5 to 1-10^-9), connection density (10^6-10^8 devices/km²)
+- **New capabilities**: Sensing-related, AI-related, sustainability, interoperability, positioning (1-10 cm), coverage, security and resilience
+
+**Timeline**:
+- Requirements: 2025-2026
+- Standards Development: 2026-2028
+- Standards Enhancement: 2028-2030
+- Systems deployment: Around 2030
+
+**3GPP Timeline**:
+- 6G requirements: Rel-20* (2026)
+- 6G studies: Rel-20* (2026-2027)
+- 6G specification: Rel-21* (2027-2028)
+
+---
+
+### LPWAN Technologies (Brief Overview)
+
+**Key LPWAN Options**:
+- **LoRa**: Long range, low power, unlicensed spectrum
+- **NB-IoT**: Narrowband IoT, licensed spectrum, cellular-based
+- **LTE-M**: LTE for Machines, licensed spectrum, cellular-based
+
+**Comparison Point**: All designed for massive IoT, differ in range, power consumption, data rates, spectrum licensing, and cost
+
+---
+
+### Private 5G
+
+**Definition**: Dedicated 5G network for specific organization/enterprise use
+
+**Spectrum Options**:
+- **Dedicated spectrum**: Very wide-range coverage (mainly outdoor)
+- **Dedicated/shared spectrum**: Wide-range (indoor/outdoor), high-capacity/throughput
+- **Shared spectrum**: Short-range (mainly indoor), high-capacity/throughput (like Wi-Fi 6/6E)
+
+**Use Cases**:
+- Industrial automation/Industry 4.0
+- Smart buildings/campuses
+- Transportation and logistics
+- Public safety
+- Healthcare facilities
+
+**Comparison with Public 5G and Wi-Fi 6**:
+
+| Feature | Public 5G | Private 5G | Wi-Fi 6 |
+|---------|-----------|------------|---------|
+| Coverage | Outdoor (long range) | Indoor/Outdoor (wide range) | Indoor (short range) |
+| Ownership | Carrier managed | Enterprise owned | Enterprise owned |
+| Target Apps | Mobile broadband, AR/VR, outdoor wireless | Massive IoT, industry automation | Indoor enterprise, retail |
+| Security | eSIM/SIM authentication | eSIM/SIM authentication | WPA3 |
+| Cost | Higher operation cost | Medium cost | Lower operation cost |
+| Modulation | 256QAM | 256QAM | 1024QAM |
+
+---
 
 ### Key Learning Questions (Part 1):
 - Principles of cellular networks?
@@ -877,7 +1093,7 @@ Selective repeat: K = 2W + 1
 - Principles and characteristics of 5G Core Network and RAN?
 - Technologies used in 5G NR Air Interface?
 - Enabling technologies of 5G?
-- How can 5G be deployed?
+- How can be 5G deployed?
 - New challenges in 5G?
 
 ---
