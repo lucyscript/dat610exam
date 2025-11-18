@@ -1079,14 +1079,132 @@ Selective repeat: K = 2W + 1
 
 ---
 
-### Key Learning Questions (Part 1):
-- Principles of cellular networks?
-- Operations of cellular networks?
-- Evolution of cellular networks?
-- Architecture of 4G and new features?
-- Current vision of 6G?
-- Different LPWAN technologies? Differences?
-- What is private 5G?
+### Part 2: 5G Networks (EXAM CRITICAL)
+
+#### 5G Core Network Architecture
+**Two Representations:**
+- **Service-based**: Shows how services are exposed by NFs through network interfaces
+- **Reference point**: Shows direct interactions between NFs
+
+**Key Network Functions (NFs):**
+- **AMF** (Access & Mobility Management): UE authentication, authorization, mobility management
+- **SMF** (Session Management): PDU session establishment, management, release between UE and DN
+- **UPF** (User Plane Function): Packet routing/forwarding, QoS handling, IP mobility anchoring
+- **AUSF** (Authentication Server): Data storage for UE authentication
+- **UDM** (Unified Data Management): UE subscription data storage
+- **PCF** (Policy Control): QoS policy rules control and management
+- **NRF** (Network Repository): Registration and discovery of NF services
+- **NSSF** (Network Slice Selection): Selects network slice instances for UE requests
+- **NEF** (Network Exposure): Interface for external applications
+- **AF** (Application Function): Provides session-related info to PCF
+
+**Control Plane vs User Plane Separation** - Key 5G feature for flexibility
+
+#### 5G RAN Architecture
+**Components:**
+- **gNodeB (gNB)**: 5G base station - terminates UP and CP protocols
+- **ng-eNB**: 4G base station connected to 5GC
+- **NG-RAN**: 5G Radio Access Network
+- **Interfaces**: NG (to 5GC), Xn (inter-gNB)
+
+**Functional Split:**
+- **Central Unit (CU)**: Non-real-time protocols and services
+- **Distributed Units (DUs)**: Physical layer and real-time services
+- One DU connects to one CU (can have secondary CU for reliability)
+
+#### 5G NR Air Interface (CRITICAL FOR EXAM)
+
+**Frequency Ranges:**
+- **FR1**: 410 MHz – 7,125 MHz (sub-6 GHz)
+- **FR2**: 24,250 MHz – 71,000 MHz (mmWave)
+
+**Modulation Schemes (Adaptive Modulation and Coding - AMC):**
+- **Uplink**: π/2-BPSK, QPSK, 16-QAM, 64-QAM, 256-QAM
+- **Downlink**: QPSK, 16-QAM, 64-QAM, 256-QAM
+- **π/2-BPSK**: BPSK variant with low peak-to-average power ratio
+
+**Key Technologies:**
+- **Massive MIMO and Beamforming**: Multiple antennas for increased capacity
+- **FDD/TDD**:
+  - FDD: Symmetric traffic, less interference, rural/suburban areas, <10 GHz
+  - TDD: Asymmetric traffic, better for MIMO/beamforming, urban areas, >10 GHz
+- **Waveforms**:
+  - **CP-OFDM**: Both UL/DL, cyclic prefix, good for multi-antenna, high spectral efficiency
+  - **DFT-S-OFDM**: UL only, lower peak-to-average power ratio, robust to fading
+- **Numerology**: Flexible subcarrier spacing (15, 30, 60, 120, 240 kHz) - higher frequencies use larger spacing
+
+**Error Control:**
+- **LDPC Codes**: For data plane (PDSCH, PUSCH) - quasi-cyclic structure, hardware-friendly
+- **Polar Codes with CRC**: For control plane (PDCCH, PUCCH, PBCH) - lower complexity/latency
+- **HARQ**: Hybrid ARQ with incremental redundancy
+
+#### Enabling Technologies of 5G (VERY IMPORTANT)
+
+**1. Software-Defined Networking (SDN):**
+- **Separates control plane from data plane**
+- Control plane logically centralized in software-based controller
+- **Benefits**: Simplified algorithms, commodity hardware, programmability, multi-vendor support
+- **Southbound Interface**: e.g., OpenFlow (controller to switches)
+- **Northbound Interface**: REST APIs (applications to controller)
+
+**2. Network Function Virtualization (NFV):**
+- **Decouples network functions from proprietary hardware**
+- **VNF** (Virtual Network Function): Software implementation of network function
+- **NFVI** (NFV Infrastructure): Provides virtualized resources (compute, storage, network)
+- **MANO** (Management and Orchestration):
+  - **NFVO**: NS lifecycle, resource orchestration
+  - **VNFM**: VNF lifecycle management
+  - **VIM**: Manages virtualized resources
+- **Benefits**: Reduced CapEx/OpEx, faster service deployment, flexibility, scalability
+
+**3. Network Slicing:**
+- **Multiple logical networks on shared infrastructure**
+- Enabled by SDN + NFV
+- Supports different service requirements:
+  - **eMBB** (enhanced Mobile Broadband): High data rates
+  - **mMTC** (massive Machine Type Communications): Many low-power devices
+  - **URLLC** (Ultra-Reliable Low-Latency): <1ms latency, 99.999% reliability
+- **Components**: VNF Forwarding Graph (VNFFG), NFVI-PoP
+
+**4. Multi-access Edge Computing (MEC):**
+- **Computing resources at network edge** (close to users/data sources)
+- **Benefits**: Reduced latency, context awareness, cloud offloading, reduced backhaul traffic
+- **Architecture**:
+  - **MEC Host**: Contains MEP (platform) and virtualization infrastructure
+  - **MEP** (MEC Platform): Provides environment for MEC apps, hosts services, traffic routing
+  - **MEC Apps**: Discover/consume MEC services
+  - **System-level**: MEO (orchestrator), OSS, User app LCM proxy
+  - **Host-level**: MEPM (platform manager), VIM
+- **MEC-in-NFV**: MEP and MEC Apps are VNFs; MEO = MEAO + NFVO
+- **5G-MEC Deployment**: Can place MEC hosts at various points (with UPF, at NAP, in CN, distributed)
+
+#### 5G Deployment Options (EXAM RELEVANT)
+**Migration Strategy from 4G to 5G:**
+- **Option 3**: NSA (Non-Standalone) - LTE master + NR secondary, connected to EPC (initial deployment)
+- **Option 2**: SA (Standalone) - NR connected to 5GC
+- **Option 4**: NSA - NR master + LTE secondary, connected to 5GC
+- **Option 5**: SA - LTE connected to 5GC
+- **Option 7**: NSA - LTE master + NR secondary, connected to 5GC
+
+**Typical Migration Path**: Option 3 → Option 4/5/7 → Full 5G SA
+
+**5G Core Benefits:**
+- Native network slicing support
+- Native MEC support
+- Native URLLC support
+- Service-based architecture
+
+#### Virtualized RAN (vRAN)
+- **Decouples RAN hardware and software**
+- RAN functions run as VNFs on COTS or custom hardware
+- **Full virtualization**: All units (RU, DU, CU) on cloud platforms
+- **Partial virtualization**: Some units on bare metal
+- **Benefits**: Flexibility, vendor independence, cost reduction
+
+#### Network Disaggregation & Decomposition
+- **Disaggregation**: Separates hardware and software vendors → eliminates vendor lock-in
+- **Decomposition**: Splits gNB into CU and DU with standard interfaces
+- **Enables**: Multi-vendor deployment, virtualization, use of COTS servers
 
 ---
 
@@ -1454,6 +1572,12 @@ Selective repeat: K = 2W + 1
 ---
 
 ### Key Learning Questions (Part 2):
+- Architecture of 5G and new features? ✓
+- Principles and characteristics of 5G Core Network and RAN? ✓
+- Technologies used in 5G NR Air Interface? ✓
+- Enabling technologies of 5G? ✓
+- How can 5G be deployed? ✓
+- New challenges in 5G? ✓
 - Architecture of 5G and new features?
 - Principles and characteristics of 5G Core Network and RAN?
 - Technologies used in 5G NR Air Interface?
