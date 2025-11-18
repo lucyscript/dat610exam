@@ -81,6 +81,188 @@ Each lecture has specific learning questions that guide exam preparation:
 ## Lecture 1: Technological Background
 
 ### What is a Computer Network?
+- **Definition**: Collection of interconnected devices (end systems) connected via network equipment (routers, switches, bridges, hubs, repeaters)
+- **Purpose**: Enable communication and resource sharing between devices
+
+### Network Types by Coverage
+- **BAN (Body Area Network)**: Personal devices on/around body
+- **PAN (Personal Area Network)**: ~1-10m range
+- **LAN (Local Area Network)**: ~100m range
+- **MAN (Metropolitan Area Network)**: City-wide coverage
+- **WAN (Wide Area Network)**: Large geographical areas (1-10+ km)
+
+### Network Topologies
+**Physical Arrangements**:
+- **Bus**: Single shared cable, hub/bus connection
+- **Star**: Central switch, point-to-point connections
+- **Ring**: Circular connection pattern
+- **Hierarchical/Tree**: Layered structure with switches/bridges
+- **Mesh**: Multiple interconnected paths (routers)
+
+**Topology Characteristics**:
+- **Centralized**: Single point of failure, easy development
+- **Decentralized**: Multiple control points, better fault tolerance
+- **Distributed**: No central control, maximum fault tolerance, high diversity
+
+### Communication in Networks
+
+**Circuit Switching** (PSTN):
+- Dedicated communication path
+- Three phases: Circuit establishment → Information transfer → Circuit disconnect
+- Constant resource allocation (low delay/jitter)
+- Transparent but inefficient
+
+**Packet Switching** (Internet):
+- No dedicated path/resource
+- Data sent as packets (header + payload)
+- **Datagram approach** (connectionless): No call setup, each packet independent
+- More efficient resource utilization
+
+### Network Challenges & Solutions
+
+**Link-Based Challenges**:
+- Representing 1s and 0s on medium → Physical layer
+- Fragmentation → Data Link layer
+- Error detection and correction → LLC sublayer
+- Flow control → Data Link/Transport layer
+- Medium Access Control (MAC) → MAC sublayer
+
+**Network-Wide Challenges**:
+- Routing → Network layer
+- End-to-end reliability → Transport layer
+- End-to-end flow control → Transport layer
+- Congestion control → Transport layer
+
+### Protocol Layering
+
+**OSI Model (7 Layers)**:
+1. **Physical**: Representing bits on medium
+2. **Data Link**: MAC, synchronization, error control, flow control
+3. **Network**: Addressing, routing
+4. **Transport**: Reliability, flow and congestion control
+5. **Session**: Establishing, managing, terminating sessions
+6. **Presentation**: Syntax differences
+7. **Application**: Applications
+
+**Internet Protocol Suite (5 Layers)**:
+1. **Physical**: Medium-specific transmission
+2. **Data Link**: IEEE 802.11 (wireless), IEEE 802.3 (Ethernet)
+3. **Network**: IP (hour glass model - single protocol)
+4. **Transport**: TCP (reliable), UDP (unreliable)
+5. **Application**: FTP, HTTP, SMTP, POP
+
+**Key Concepts**:
+- **Encapsulation**: Adding headers at each layer (sender side)
+- **Decapsulation**: Removing headers at each layer (receiver side)
+- **Hour Glass Model**: IP as the narrow waist - enables interoperability
+
+### Networking Equipment by Layer
+- **Physical**: Repeater, Hub
+- **Data Link (MAC)**: Bridge, Switch
+- **Network**: Router
+
+### Wireless Network Challenges
+**Beyond wired network challenges**:
+- **High Interference**: Shared medium, electromagnetic interference
+- **Limited Coverage**: Signal attenuation with distance
+- **Error Prone**: Higher bit error rates than wired
+- **User Mobility**: Changing topology, handoffs
+- **Variability**: Channel conditions change over time/location
+
+**Impact on Protocols**:
+- Physical layer: Signal propagation, modulation
+- MAC layer: Shared medium access, hidden/exposed terminals
+- LLC: Higher error rates require robust error control
+- Network layer: Mobility support, routing in dynamic topology
+- Transport layer: TCP performance issues
+
+### Wireless Network Taxonomy
+
+**By Range and Technology**:
+- **Long Range**: Cellular (2G-5G), WiMax, LPWAN
+- **Medium Range**: Wi-Fi (802.11), Z-Wave
+- **Short Range**: Bluetooth, NFC, ZigBee
+
+**By Infrastructure**:
+- **Infrastructureless**: Ad-hoc, Sensor, Mesh networks
+- **Infrastructured**: Wireless LAN, Cellular WAN
+
+**By Tier**:
+- **High Tier**: Pedestrian + vehicular speeds, large coverage (cellular)
+- **Low Tier**: Pedestrian speeds only, short range (WiFi, Bluetooth)
+
+**By Spectrum**:
+- **Licensed**: Exclusive use (cellular networks)
+- **Shared**: Authorized Shared Access (ASA)
+- **Unlicensed**: ISM bands (WiFi, Bluetooth, ZigBee)
+
+### Ad-hoc Networks
+**Characteristics**:
+- Infrastructureless, multihop communication
+- Mobile nodes can relay traffic
+- Dynamic topology
+- All links wireless
+
+**Applications**:
+- Temporary network deployment
+- Disaster relief operations
+- Smart buildings
+- Cooperative objects
+- Healthcare
+
+**Challenges**:
+- Wireless medium issues
+- Interference, Hidden/Exposed terminal problems
+- Mobility and node failures
+- Self-forming, self-configuration, self-healing
+- Topology maintenance and routing
+- Node localization and time synchronization
+
+### Cellular Networks
+**Characteristics**:
+- Fixed infrastructure, single hop
+- Terminal nodes don't relay traffic
+- Wireless access link, wired/wireless backbone
+
+**Architecture**:
+- **Cell**: Coverage area
+- **Base Station Transceiver/Radio Port**: Wireless interface
+- **Base Station Controller/Radio Port Controller**: Cell management
+- **Mobile Switching Center**: Network coordination
+
+### Sensor & Actuator Networks
+**Characteristics**:
+- One-to-many, many-to-one, many-to-many communication
+- Temporally and spatially correlated data
+- Generally fixed nodes (network mobility possible)
+- Very critical power efficiency
+- Order of thousands of nodes
+- Tiny, low processing/memory capacity
+- Must be cost effective
+- Often operate in hostile/harsh environments
+
+**Design Factors** (CRITICAL):
+- Environment and operating conditions
+- Fault tolerance requirements
+- Scalability (thousands of nodes)
+- Production cost constraints
+- Hardware constraints
+- Power consumption (most critical)
+- Topology changes
+
+### Mesh Networks
+**Components**:
+- **Mesh Routers**: Form backbone mesh
+- **Mesh Clients**: Connect to access mesh
+- **Gateway Nodes**: Connect to Internet/other networks
+
+**Types**:
+- **Backbone Mesh**: Router-to-router infrastructure
+- **Access Mesh**: Client access to infrastructure
+
+**Applications**:
+- Broadband home networking
+- Community/neighborhood networking
 A **computer network** is an interconnected collection of autonomous computers connected through:
 - **Networking devices**: Gateways, routers, switches, bridges, hubs, repeaters
 - **Communication links**: Wired (fiber optic, twisted pair, coax) or wireless
@@ -440,6 +622,35 @@ Physical Layer (many media)
 - Transportation systems
 - Building automation
 
+### Comparison: Ad-hoc vs Mesh vs Sensor
+
+| Factor | Ad-hoc | Mesh | Sensor |
+|--------|--------|------|---------|
+| **Infrastructure** | None | Gateway nodes | Collector/gateway nodes |
+| **Mobility** | Mobile | Typically fixed | Fixed (network mobility) |
+| **Scalability** | Hundreds | Tens | Thousands |
+| **Power** | Not critical | Not critical | **Very critical** |
+| **Hardware** | Laptops, PDAs | No constraints | Tiny, limited resources |
+| **QoS Focus** | Bandwidth, delay, jitter | Bandwidth, delay, jitter | **Power, delay, reliability** |
+| **Traffic** | Random, multimedia | Random, multimedia | Correlated data |
+| **Cost** | No constraints | No constraints | **Must be cost effective** |
+
+### Ad-hoc vs Cellular
+
+| Aspect | Ad-hoc | Cellular |
+|--------|--------|----------|
+| **Infrastructure** | None | Fixed infrastructure |
+| **Topology** | May change often | Infrastructure rarely changes |
+| **Node Function** | Terminals relay traffic | Infrastructure nodes relay, terminals don't |
+| **Links** | Mostly wireless, multihop | Wireless access + wired/wireless backbone |
+
+### EXAM-CRITICAL Formulas & Concepts
+- **Protocol layers**: Know which layer handles what function
+- **Encapsulation/Decapsulation**: Header addition/removal at each layer
+- **Packet vs Circuit switching**: Key differences and applications
+- **Wireless challenges**: Know what makes wireless different from wired
+- **Network taxonomy**: Classification by range, infrastructure, tier, spectrum
+- **Design factors**: Environment, fault tolerance, scalability, power, cost
 ---
 
 ## Paradigm Comparison Table ⭐ EXAM TOPIC
