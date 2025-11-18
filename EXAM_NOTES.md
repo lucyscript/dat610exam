@@ -79,15 +79,366 @@ Each lecture has specific learning questions that guide exam preparation:
 ---
 
 ## Lecture 1: Technological Background
-*[TO BE COMPLETED]*
 
-### Key Learning Questions:
-- What is a computer network?
-- Which are the types of networks?
-- How is communication in a network working?
-- What are the challenges in networks?
-- Additional challenges of wireless networks?
-- Characteristics of different wireless networks (taxonomy)?
+### Computer Networks and Types
+
+**Computer Network Definition**:
+- Interconnected devices (computers, routers, switches, etc.) that communicate and share resources
+- Network components: gateways, routers, switches, bridges, hubs, repeaters
+
+**Network Types by Coverage**:
+- **BAN (Body Area Network)**: On-body or implanted devices
+- **PAN (Personal Area Network)**: Personal devices (~10m)
+- **LAN (Local Area Network)**: Building or campus
+- **MAN (Metropolitan Area Network)**: City-wide
+- **WAN (Wide Area Network)**: Country/global scale
+
+**Network Topologies**:
+- **Bus**: All devices on single shared medium (hub or bus)
+- **Ring**: Circular connection pattern
+- **Star**: Central switch/hub with spoke connections
+- **Hierarchical/Tree**: Multi-level switch/bridge structure
+- **Mesh**: Interconnected routers with multiple paths
+
+**Topology Characteristics**:
+- **Centralized**: Single point of failure, limited scalability, easy development
+- **Decentralized**: Multiple control points, better fault tolerance
+- **Distributed**: No central control, high fault tolerance, complex development, high scalability
+
+### Communication Methods
+
+**Circuit Switching**:
+- **Characteristics**: Dedicated communication path, constant resource allocation
+- **Three phases**: Circuit establishment → Information transfer → Circuit disconnect
+- **Connection-oriented** communication
+- **Advantages**: Constant delay/jitter, transparent
+- **Disadvantages**: Inefficient resource use
+- **Example**: PSTN (Public Switched Telephone Network)
+
+**Packet Switching**:
+- **Characteristics**: Data divided into packets with headers
+- **No dedicated path/resource** allocation
+- **Datagram approach**: Connectionless
+  - No call setup required
+  - Each packet independent
+- **Advantages**: Efficient resource sharing
+- **Example**: Internet
+
+### Link-Based Connection Challenges
+
+**Physical Layer Challenges**:
+- Representing 1s and 0s on the medium
+- Signal propagation
+
+**Data Link Layer Challenges**:
+- **Fragmentation**: Dividing information into subunits
+- **Error detection and correction**: Ensuring reliability
+- **Flow control**: Deciding sending rate
+- **Medium Access Control (MAC)**: Shared medium access
+
+**Network Layer Challenges**:
+- **Routing**: Finding paths through network
+- **End-to-end reliability**: Guaranteed delivery
+- **End-to-end flow control**: Preventing receiver overflow
+- **Congestion control**: Managing network load
+
+### Protocols and Layering
+
+**Protocol Definition**:
+- Formal standards and policies with rules, procedures, and formats
+- Define communication between devices over a network
+- Enable **interoperability and reusability**
+
+**Protocol Layering**:
+- Divides protocol design into smaller steps
+- Creates **protocol stack**
+- Each layer addresses specific challenges
+
+**OSI (Open Systems Interconnection) 7-Layer Model**:
+1. **Physical**: Representing 1s and 0s on medium
+2. **Data Link**: MAC, synchronization, error control, flow control
+3. **Network**: Addressing, routing
+4. **Transport**: Reliability, flow and congestion control
+5. **Session**: Establishing, managing, terminating sessions
+6. **Presentation**: Eliminating syntax differences
+7. **Application**: Applications
+
+**Encapsulation/Decapsulation**:
+- **Encapsulation**: Each layer adds header (some add trailer)
+  - Application Header (AH) → Transport Header (TH) → Network Header (NH) → MAC Header (MH) + MAC Trailer (MT)
+- **Decapsulation**: Reverse process at receiver
+
+**End Systems vs Intermediate Systems**:
+- **End systems**: All 7 OSI layers
+- **Routers**: Network, Data Link, Physical layers
+- **Switches/Bridges**: Data Link, Physical layers
+
+### Networking Equipment by OSI Layer
+
+**Physical Layer**:
+- **Repeater**: Amplifies signal
+- **Hub**: Multi-port repeater
+
+**Data Link Layer (MAC)**:
+- **Bridge**: Connects network segments
+- **Switch**: Multi-port bridge with forwarding table
+
+**Network Layer**:
+- **Router**: Forwards packets between networks using routing tables
+
+### Internetworking
+
+**Concept**:
+- Interconnection of multiple networks
+- **Hierarchical structure**: LAN → MAN → WAN
+- Each network maintains its identity
+- Uses end systems and intermediate systems
+
+**Internet Protocol Suite (TCP/IP)**:
+- **5 Layers** (simplified from OSI):
+  1. **Application**: ftp, http, smtp, pop
+  2. **Transport**: TCP (reliable), UDP (unreliable)
+  3. **Network**: IP, ICMP, IGMP, ARP, RARP, BOOTP, DHCP
+  4. **Data Link**: IEEE 802.11 (Wireless), IEEE 802.3 (Ethernet)
+  5. **Physical**: Wireless, Fiber Optic, Twisted Pair, Coax
+
+**Hour Glass Architecture**:
+- Narrow waist at Network layer (IP)
+- Many applications and physical technologies
+- IP provides universal interconnection
+
+### Standardization Organizations
+
+- **IETF**: Internet Engineering Task Force (Internet protocols)
+- **IEEE**: Institute of Electrical and Electronics Engineers (Wireless/wired communication)
+- **ITU**: International Telecommunication Union (Telecom protocols, PSTN)
+- **ETSI**: European Telecommunications Standards Institute
+- **ISO**: International Organization for Standardization
+- **3GPP**: Third Generation Partnership Project (Cellular standards)
+- **5GPPP**: 5G Infrastructure Public-Private Partnership
+
+### Wireless Network Challenges
+
+**Wireless Channel Characteristics**:
+- **High interference**: Radio signals interfere
+- **Limited coverage**: Distance and obstacles limit range
+- **Error prone**: Higher bit error rate than wired
+- **User mobility**: Devices move during communication
+- **Variability**: Channel conditions change dynamically
+
+**Impact Across Layers**:
+- Challenges affect multiple layers:
+  - Physical layer: Signal quality
+  - Data Link layer: Multiple access control, error control
+  - Network layer: Routing with mobility
+  - Transport layer: TCP performance degradation
+
+### Wireless Network Taxonomy
+
+**By Range and Technology**:
+- **Long Range**:
+  - Cellular technologies (2G-5G)
+  - WiMax
+- **Medium Range**:
+  - WiFi (802.11)
+  - Z-Wave
+- **Short Range**:
+  - Bluetooth
+  - NFC (Near Field Communication)
+  - ZigBee
+
+**By Infrastructure**:
+- **Infrastructureless**:
+  - Ad-Hoc Networks
+  - Sensor Networks
+  - Mesh Networks
+- **Infrastructured**:
+  - LAN (WiFi access points)
+  - WAN (Cellular networks)
+
+**By Tier**:
+- **High Tier**:
+  - Designed for pedestrian AND vehicular speeds
+  - Coverage of large geographical areas
+  - Example: Cellular networks
+- **Low Tier**:
+  - Designed for pedestrian speeds only
+  - Short coverage range
+  - Example: WiFi, Bluetooth
+
+**By Spectrum**:
+- **Licensed Spectrum**:
+  - Exclusive use
+  - Classical cellular networks
+  - Requires license from regulatory authority
+- **Shared Spectrum**:
+  - Shared exclusive use
+  - Authorized Shared Access (ASA)
+- **Unlicensed Spectrum**:
+  - Shared use by multiple technologies
+  - WiFi, Bluetooth, ZigBee (ISM bands)
+
+### Ad-Hoc Networking
+
+**Characteristics**:
+- **Infrastructureless**: No fixed base stations
+- **Multihop**: Data relayed through intermediate nodes
+- **Dynamic topology**: Nodes can be mobile
+- **Self-organizing**: No centralized control
+
+**Applications**:
+- Temporary network deployment (conferences, meetings)
+- Disaster relief operations
+- Smart buildings
+- Cooperative objects (vehicles, robots)
+- Healthcare (patient monitoring)
+
+**Challenges**:
+- **Wireless medium**: All general wireless challenges
+- **Interference**: Hidden terminal and exposed terminal problems
+- **Mobility**: Topology changes frequently
+- **Node failures**: Unreliable nodes
+- **Self-forming and self-configuration**: Automatic network setup
+- **Topology maintenance**: Adapting to changes
+- **Routing**: Finding paths in dynamic topology
+- **Self-healing**: Recovering from failures
+- **Node localization**: Determining positions
+- **Time synchronization**: Coordinating time across nodes
+- **End-to-end reliability**: Multi-hop reliability
+- **Congestion control**: Distributed control
+
+### Cellular Networking
+
+**Characteristics**:
+- **Infrastructured**: Fixed base stations and switches
+- **Single hop**: Terminals communicate directly with base station
+- **Planned deployment**: Engineered coverage
+
+**Architecture Components**:
+- **Cell**: Geographic coverage area
+- **Base Station Transceiver (Radio Port)**: Wireless interface
+- **Base Station Controller (Radio Port Controller)**: Manages multiple base stations
+- **Mobile Switching Center**: Connects to other networks/cells
+
+**Ad-hoc vs Cellular Comparison**:
+
+| Aspect | Ad-Hoc | Cellular |
+|--------|--------|----------|
+| **Infrastructure** | None | Fixed infrastructure |
+| **Topology** | May change often (mobility/failures) | Infrastructure seldom changes |
+| **Node Role** | Terminals relay others' traffic | Infrastructure relays, terminals don't |
+| **Links** | Mostly wireless, multi-hop | Wireless access + wired/wireless backbone |
+
+### Sensor Networks
+
+**Architecture Components**:
+- **Sensor Nodes (snode)**: Sense environment
+- **Actuator Nodes (anode)**: Act on environment
+- **Collector Nodes (cnode)**: Aggregate sensor data
+- **Gateway Nodes (gnode)**: Connect to external networks
+- **Task Manager**: Coordinates sensing tasks
+- **Proxy Server**: Data storage and processing
+
+**Design Factors**:
+- **Environment**: Often harsh, hostile, unreachable
+- **Fault Tolerance**: High requirements, critical points of failure
+- **Scalability**: Order of thousands of nodes
+- **Production Cost**: Must be cost-effective (mass deployment)
+- **Hardware Constraints**: Tiny, low processing power, limited memory
+- **Topology**: Generally fixed, network mobility possible
+- **Power Consumption**: VERY CRITICAL (battery-powered)
+
+**Networking Regime**:
+- One-to-many (broadcast commands)
+- Many-to-one (data collection)
+- Many-to-many (distributed sensing)
+
+**Traffic Characteristics**:
+- Temporally and spatially correlated
+- Data-centric (not address-centric)
+
+**QoS Requirements**:
+- Power consumption (most critical)
+- Delay
+- Reliability
+
+### Mesh Networks
+
+**Architecture**:
+- **Mesh Routers**: Form backbone, relay traffic
+- **Mesh Clients**: End devices (laptops, phones)
+- **Backbone Mesh**: Router-to-router connections
+- **Access Mesh**: Client-to-router connections
+
+**Integration**:
+- Connect to Internet
+- Interwork with Cellular networks
+- Extend Wireless LAN coverage
+
+**Applications**:
+- Broadband home networking
+- Community and neighborhood networking
+- Enterprise networking
+- Transportation systems
+- Building automation and control networks
+
+**Characteristics**:
+- **Infrastructure**: Typically fixed mesh routers
+- **Self-forming**: Automatic network configuration
+- **Self-healing**: Automatic route recovery
+- **Multi-hop**: Extended coverage through relaying
+
+### Network Paradigm Comparison
+
+| Factor | Ad-Hoc | Mesh | Sensor/Actuator |
+|--------|--------|------|-----------------|
+| **Medium** | ISM | ISM | ISM, acoustic, low antenna |
+| **Networking** | Random 1-to-1 | Random 1-to-1, gateway nodes | 1-to-many, many-to-1, many-to-many |
+| **Traffic** | Random, multimedia | Random, multimedia | Correlated, data |
+| **QoS** | Bandwidth, delay, jitter | Bandwidth, delay, jitter | Power, delay, reliability |
+| **Mobility** | Mobile | Typically fixed | Generally fixed, network mobility |
+| **Fault Tolerance** | No critical point | Critical points | Critical points, high requirements |
+| **Environment** | Day-to-day | Day-to-day | Hostile, harsh, unreachable |
+| **Power** | Not very critical | Not critical | VERY critical |
+| **Scalability** | Hundreds | Tens | Thousands |
+| **Hardware** | Laptops, PDAs | No constraint | Tiny, low power/memory |
+| **Cost** | No hard constraints | No hard constraints | Must be cost-effective |
+
+### Networking Tools
+
+**Packet Analyzers**:
+- **Wireshark**: Free, open-source, GUI-based
+- **Tcpdump**: CLI-based packet capture
+
+**Network Simulators/Emulators**:
+- **Cisco Packet Tracer**: Visual simulator
+- **GNS3**: Network software emulator
+
+**Diagnostic Tools (Unix/Linux)**:
+- **ping**: ICMP echo test (reachability)
+- **traceroute**: Path discovery
+- **iperf**: Network performance measurements
+- **netstat**: Network statistics
+- **nslookup**: DNS queries
+- **ifconfig**: Interface configuration
+- **nmap**: Network scanning
+
+**Monitoring**:
+- **PRTG**: SNMP-based device performance monitoring
+
+### Exam Tips for Lecture 1:
+
+- Understand **difference between circuit and packet switching**
+- Know **OSI layers** and their functions
+- Understand **encapsulation process** (headers/trailers)
+- Be able to **compare ad-hoc, cellular, sensor, and mesh networks**
+- Know **wireless network challenges** and how they differ from wired
+- Understand **network taxonomy** (by range, infrastructure, tier, spectrum)
+- Know **standardization organizations** and their roles
+- Understand **networking equipment** at each OSI layer
+- Be able to explain **hidden/exposed terminal problems** (from wireless challenges)
+- Know **design factors for sensor networks** (especially power consumption)
+- Understand **Internet Protocol Suite hour glass architecture**
 
 ---
 
@@ -106,16 +457,172 @@ Each lecture has specific learning questions that guide exam preparation:
 ---
 
 ## Lecture 3: Data Link Layer (MAC)
-*[TO BE COMPLETED]*
 
-### Key Learning Questions:
-- Issues of accessing shared medium?
-- How are multiple access schemes categorized?
-- What is CSMA? Why multiple versions?
-- Hidden and exposed terminal problems? Solutions?
-- What is CDMA?
-- What are OFDM, OFDMA, SC-OFDMA?
-- Pros and cons of CDMA vs OFDMA?
+### Multiple Access Schemes - Classification
+
+**Three Categories:**
+1. **Contention-Based**: Aloha, Slotted Aloha, CSMA variants
+2. **Conflict-Free (Fixed Allocation)**: FDMA, TDMA, CDMA, OFDMA, NOMA
+3. **Hybrid**: Reservation-based (PRMA, D-TDMA, RAMA), Token-based (Token Ring/Bus)
+
+### CSMA (Carrier Sense Multiple Access)
+
+**Basic Principle**: Sense the media before transmitting
+
+**CSMA Variants:**
+- **1-Persistent CSMA**: If idle → transmit immediately; if busy → wait and sense continuously
+- **Non-Persistent CSMA**: If idle → transmit; if busy → wait random time, then repeat
+- **p-Persistent CSMA**: If idle → transmit with probability p; if not → wait next slot
+
+**CSMA/CD (Collision Detection)**:
+- Monitor for collisions DURING transmission
+- **Exponential Backoff**: After nth collision, wait random slots from [0, 2^n-1]
+- Time slot = 2τ (τ = worst-case propagation time)
+- **Used in**: Ethernet (IEEE 802.3)
+
+**CSMA/CA (Collision Avoidance)**:
+- **Why needed**: Cannot detect collisions in wireless (hidden terminal problem)
+- **RTS/CTS mechanism**: Request to Send → Clear to Send → Data → ACK
+- **DCF (Distributed Coordination Function)**: Controls waiting time (DIFS, SIFS)
+- **NAV (Network Allocation Vector)**: Counter for transmission duration
+- **Used in**: WiFi (IEEE 802.11)
+
+### Hidden and Exposed Terminal Problems
+
+**Hidden Terminal Problem**:
+- Two nodes (A and C) transmit to B simultaneously
+- A and C cannot sense each other (hidden)
+- Causes collision at B
+- **Solution**: RTS/CTS mechanism in CSMA/CA
+
+**Exposed Terminal Problem**:
+- Node C wants to transmit to D but senses transmission from B→A
+- C defers unnecessarily (overhearing)
+- Reduces channel efficiency
+
+### CDMA (Code Division Multiple Access)
+
+**Core Concept**: Spread Spectrum - spread signal over wider bandwidth using codes
+
+**Spread Spectrum Types:**
+1. **FHSS (Frequency Hopping)**: Signal hops across frequencies
+   - Slow Hopping: Tc ≥ Ts
+   - Fast Hopping: Tc < Ts
+   - Process Gain: Gp = 10 log C (C = number of frequency channels)
+
+2. **DSSS (Direct Sequence)**: Each bit spread by chip sequence
+   - Process Gain: Gp = 10 log (Bss/B)
+   - Implemented using DFT/IDFT (FFT/IFFT)
+
+**PN Sequences (Pseudonoise):**
+- **Maximum Length Sequence Properties**:
+  1. **Balance**: |#(1s) - #(-1s)| ≤ 1
+  2. **Run**: 50% are -1 runs, 50% are 1 runs; 1/2^n are n-length runs
+  3. **Auto-correlation**: C0 = N, Ck = -1 for k ≠ 0 (mod N)
+
+- **Short Codes**: Length 2^15-1 (used in downlink, identify cells)
+- **Long Codes**: Length 2^42-1 (used in uplink, identify mobile terminals)
+
+**Orthogonal Codes:**
+- **Walsh-Hadamard Codes**: Cross-correlation = 0
+- Used for channelization in downlink
+- Variable-length codes from code tree
+
+**CDMA Advantages:**
+- Soft capacity (limited by interference)
+- All frequencies reused in neighboring cells
+- Soft handoff (no frequency change needed)
+- Power control reduces interference
+- Inherent frequency diversity
+
+### OFDM/OFDMA
+
+**OFDM (Orthogonal Frequency Division Multiplexing)**:
+- Multiple closely-spaced subcarriers at different frequencies
+- Original stream R bps split into N substreams of R/N bps
+- Bit duration increases from 1/R to N/R
+
+**Orthogonality Property**:
+- Peak of each subcarrier occurs where others are zero
+- No interference between subcarriers
+- fb must be multiple of 1/T (T = bit time of subcarrier)
+- Two signals orthogonal if: Average[s1(t)s2(t)] = 0
+
+**Implementation**:
+- **FFT/IFFT**: Efficient DFT computation (N must be power of 2)
+- **Cyclic Prefix (CP)**: Guard interval + copy of OFDM symbol
+  - Combats ISI
+  - Maintains orthogonality
+
+**OFDM Advantages**:
+- Frequency selective fading affects only some subcarriers
+- ISI overcome (longer symbol duration)
+- No equalizer needed (with CP)
+- Efficient spectrum utilization
+
+**OFDM Difficulties**:
+- **PAPR (Peak-to-Average Power Ratio)**: High peak values require expensive power amplifiers
+- **ICI (Intercarrier Interference)**: Requires tight frequency synchronization
+
+**OFDMA**:
+- Subcarriers divided into **subchannels**
+- Each user assigned one or more subchannels
+- **Subchannelization**: How subchannels allocated to users (important for power saving)
+
+**SC-FDMA (Single-Carrier FDMA)**:
+- Extra DFT before subcarrier mapping
+- Lower PAPR than OFDMA
+- Used in **uplink only** (e.g., LTE uplink)
+- Same data stream on all subcarriers (spread)
+
+### NOMA (Non-Orthogonal Multiple Access)
+
+**Goal**: Support more users than available orthogonal resources
+
+**Two Categories**:
+1. **Code Domain**: Different spreading sequences (like CDMA but improved)
+2. **Power Domain**: Different power levels allocated to users
+
+**Key Techniques**:
+- **Superposition Coding** at transmitter
+- **Successive Interference Cancellation (SIC)** at receiver
+
+**Advantages**:
+- Supports diverse service requirements (eMBB, URLLC, mMTC)
+- Better spectrum efficiency than OMA
+- Enables network slicing for 5G
+
+### Comparison: CDMA vs OFDMA
+
+| Feature | CDMA | OFDMA |
+|---------|------|-------|
+| **Separation** | Code | Frequency |
+| **Bandwidth** | Wide (spread) | Divided into subcarriers |
+| **Flexibility** | Limited | High (adaptive modulation per subcarrier) |
+| **PAPR** | Low | High (issue for uplink) |
+| **Frequency Reuse** | 1 (all frequencies) | Requires planning |
+| **Multipath** | Rake receiver | Cyclic prefix |
+| **Complexity** | High (code synchronization) | Moderate (FFT/IFFT) |
+
+### Key Formulas
+
+**Auto-correlation**: Ck = Σ(an × an+k) for n=1 to N
+
+**Cross-correlation**: Rk = Σ(an × bn+k) for n=1 to N
+
+**Process Gain (FHSS)**: Gp = 10 log C dB
+
+**Process Gain (DSSS)**: Gp = 10 log (Bss/B) dB
+
+### Exam Tips for Lecture 3:
+- Understand **why CSMA/CA** instead of CSMA/CD for wireless
+- Be able to **explain hidden/exposed terminal** with diagrams
+- Know **properties of PN sequences** (balance, run, auto-correlation)
+- Understand **orthogonality** concept in both CDMA and OFDMA
+- Know **differences between OFDM and SC-FDMA** (especially PAPR)
+- Understand **NOMA benefits** for 5G diverse services
+- Be able to **compare CDMA vs OFDMA** (pros/cons)
+- Understand **cyclic prefix** purpose in OFDM
 
 ---
 
