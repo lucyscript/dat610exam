@@ -5996,7 +5996,400 @@ HTTP request time:
 
 ## Lecture 6: Cellular Networks
 
-*Summary will be added here*
+### Overview
+Cellular networks represent the evolution of mobile communications from 1G analog voice calls through 5G networks supporting eMBB, mMTC, and URLLC, with 6G (IMT-2030) on the horizon. This lecture covers fundamental cellular principles, network evolution, and detailed 5G architecture.
+
+### Part 1: Fundamentals and Evolution
+
+#### 1. Principles of Cellular Networks
+
+**Core Concept:**
+- Developed to increase capacity for mobile radio telephone services
+- Low-power systems (<100W) with shorter radius (<20km)
+- Multiple transmitters/receivers covering geographic areas
+- Infrastructured, single-hop topology
+
+**Key Advantages:**
+1. **Frequency Reuse**: Better utilization of wireless resources and higher capacity
+2. **Lower Power Requirements**: Enables smaller devices
+3. **Long-lasting Batteries**: Due to reduced power consumption
+
+**Cell Organization:**
+- **Cell Shapes**:
+  - Square cells: Simplest but geometry not ideal
+  - **Hexagonal cells**: Provide equidistant antennas (preferred)
+  - In practice: Variations due to antenna design, topographical limitations, signal propagation
+
+**Frequency Reuse:**
+- No same frequency band in adjacent cells (interference avoidance)
+- **Reuse Factor N**: Number of different frequency sets
+  - Example: N=7 means 7 different frequency groups
+- Minimum separation required between cells using same frequency
+
+**Capacity Increase Methods:**
+
+1. **Adding New Channels**
+   - When unused channels are available
+
+2. **Frequency Borrowing**
+   - From adjacent cells temporarily
+
+3. **Cell Splitting**
+   - Dividing cells in high-traffic areas into smaller cells
+
+4. **Cell Sectoring**
+   - Dividing cell into sectors (e.g., triangular antennas creating 3 sectors)
+
+5. **Network Densification**
+   - Femtocell → Picocell → Macrocell hierarchy
+   - Self-organizing networks with dynamic assignment
+
+6. **Inter-Cell Interference Coordination (ICIC) and Coordinated Multipoint Transmission**
+   - Limiting interference beyond traditional reuse patterns
+
+#### 2. Elements of Cellular Systems
+
+**System Components:**
+
+1. **Base Station (BS) / eNodeB / gNodeB**
+   - Responsible for radio Tx/Rx to/from User Equipment (UE)
+   - Cell tower with antennas
+
+2. **Air Interface**
+   - Wireless interface between BS and UE
+   - Different technologies per generation (analog, TDMA, CDMA, OFDMA, etc.)
+
+3. **Mobile Telecommunication Switching Office (MTSO)**
+   - Originating and termination functions for calls
+   - Central control and coordination
+
+4. **Radio Access Network (RAN)**
+   - Network between BSs and core network
+   - E-UTRAN for LTE, NG-RAN for 5G
+
+5. **Core Network**
+   - Provision of networking services
+   - Connection to Internet and other networks
+
+6. **User Equipment (UE)**
+   - Mobile Equipment (ME) + Universal Subscriber Identity Module (USIM)
+
+**Channel Types:**
+
+1. **Control Channels**
+   - Information exchange to set up and manage connections
+   - Signaling, authentication, handover commands
+
+2. **Traffic Channels**
+   - Transportation of voice or data between users
+   - Actual user data transmission
+
+#### 3. Operation of Cellular Systems
+
+**Typical Voice Call Steps:**
+
+1. **Mobile Unit Initialization**
+   - UE scans and selects strongest setup control channel
+   - Handshake between UE and MTSO
+   - Scanning repeated periodically
+
+2. **Mobile-Originated Call**
+   - UE sends called number on preselected control channel (if idle)
+   - BS forwards request to MTSO
+
+3. **Paging**
+   - MTSO sends paging message to certain BSs
+   - Based on last known location information
+   - BSs broadcast paging signal
+
+4. **Call Accepted**
+   - Called UE recognizes its number and responds
+   - BS forwards response to MTSO
+   - MTSO sets up circuit and selects traffic channels
+
+5. **Ongoing Call**
+   - Connection maintained
+   - Active communication
+
+6. **Handoff/Handover**
+   - When UE moves out of range of current BS
+   - Traffic channel changes to new BS
+   - Seamless process (ideally)
+
+**Other Functions:**
+- Call termination
+- Call drop handling
+- Calls to/from fixed and remote mobile subscribers
+- Emergency call prioritization
+
+#### 4. Evolution of Cellular Networks
+
+**Timeline and Characteristics:**
+
+| Generation | Deployment | Download Speed | Latency | Air Interface | Core Network | Primary Service |
+|------------|-----------|----------------|---------|---------------|--------------|-----------------|
+| **1G** | 1980s | 2 kbit/s | N/A | Analog | Circuit switching | Analog phone calls |
+| **2G** | 1990s | 384 kbit/s | 629 ms | Digital (TDMA, CDMA) | Circuit switching, packet switching | Digital calls, messaging |
+| **3G** | 2000s | 2 Mbit/s | 212 ms | WCDMA, CDMA2000 | Packet switching, IP | Phone calls, messaging, data |
+| **4G** | 2010s | 1 Gbit/s | 60-98 ms | OFDM, OFDMA, MIMO | IP | Full data services |
+| **5G** | 2020s | > 1 Gbps | < 1 ms | AAS, FD-MIMO | IP | eMBB, mMTC, URLLC |
+
+**Intermediate Generations:**
+
+**2G+ Technologies:**
+- **GPRS (General Packet Radio Service)**
+  - Datagram switching capability to GSM
+  - Persistent data connection
+  - Up to 171.2 kbps
+
+- **EDGE (Enhanced Data Rates for GSM Evolution)**
+  - Up to 600-750 kbps
+
+**3G+ Technologies:**
+- **HSDPA (High-Speed Downlink Packet Access)** - 3GPP Release 5
+  - 1.8 to 14.4 Mbps
+  - Adaptive modulation and coding, hybrid ARQ, fast scheduling
+
+- **HSUPA (High-Speed Uplink Packet Access)** - 3GPP Release 6
+  - Up to 5.76 Mbps
+
+- **HSPA+ (High-Speed Packet Access Plus)** - 3GPP Release 7
+  - 21 to 336 Mbps
+  - 64 QAM, 2x2 and 4x4 MIMO, dual or multicarrier combinations
+
+#### 5. Fourth Generation (4G) - LTE
+
+**LTE (Long Term Evolution):**
+- By 3GPP
+- Release 8-9: LTE (CAT1-5, up to 150 Mbps)
+- Release 10-12: LTE-Advanced (CAT6-16, up to 1 Gbps, IMT-Advanced requirements met)
+- Release 13+: LTE-Advanced Pro (CAT17-19, up to 3 Gbps)
+
+**LTE Architecture Components:**
+
+**E-UTRAN (Evolved UTRAN):**
+- Multiple eNodeBs (evolved NodeBs)
+- eNodeBs embed own control functionality
+- Can communicate directly between themselves (X2 interface)
+- Use of Relay Nodes (not simple repeaters)
+
+**EPC (Evolved Packet Core):**
+
+1. **MME (Mobility Management Entity)**
+   - UE authentication
+   - Selecting SGSN at 2G/3G handovers
+   - Resource allocation to UEs
+   - Mobility management when eNodeBs cannot
+
+2. **S-GW (Serving Gateway)**
+   - Interconnection point between E-UTRAN and EPC
+   - Packet routing and forwarding
+   - Buffering download packets
+   - Mobility anchor for inter-3GPP mobility
+
+3. **P-GW (PDN Gateway)**
+   - Routing point to external Packet Data Network (PDN)
+   - Connection to Internet and other networks
+
+4. **HSS (Home Subscriber Server)**
+   - Subscriber information database
+
+**LTE Features:**
+
+**Air Interface:**
+- OFDM/MIMO technology
+- Downlink: OFDMA (Orthogonal Frequency Division Multiple Access)
+- Uplink: SC-FDMA (Single Carrier FDMA)
+- Both FDD and TDD supported
+- **Carrier Aggregation** (LTE-Advanced):
+  - Intra-band contiguous
+  - Intra-band non-contiguous
+  - Inter-band non-contiguous
+
+**Resource Management:**
+- **Bearer**: Virtual connection with QoS parameters
+- **Classes**: Guaranteed Bit Rate (GBR) and Non-GBR
+- Different QoS Class Identifiers (QCIs) for various service types
+
+**Radio Resource Allocation:**
+- Resource Grid divided into Resource Elements
+- Resource Elements compose Resource Blocks
+- Resource Blocks allocated to users
+
+#### 6. Standards Development Process
+
+**ITU and 3GPP Relationship:**
+
+1. **ITU** issues recommendations and reports
+   - Overall concept and technical requirements
+   - Performance and service requirements
+   - Examples: IMT-2000 (3G), IMT-Advanced (4G), IMT-2020 (5G), IMT-2030 (6G)
+
+2. **3GPP** develops detailed technical specifications
+   - Implementation specifications based on ITU requirements
+   - Releases define technology generations:
+     - 3G: Release 99, Releases 4-7
+     - 4G: Releases 8-14
+     - 5G: Releases 15+
+
+3. **ITU** translates 3GPP specifications into international standards
+
+**3GPP Release Timeline (Current):**
+- Release 18: RAN1, RAN2/3/4, SA/CT (2023-2024)
+- Release 19: RAN1, RAN2/3/4, SA/CT (2024-2025)
+- Release 20: 6G studies begin (2026+)
+- Release 21: 6G specification (2027+)
+
+#### 7. Fifth Generation (5G) - Introduction
+
+**5G Use Scenarios (IMT-2020):**
+
+1. **eMBB (Enhanced Mobile Broadband)**
+   - **Requirements**: Peak data rate, user experienced data rate
+   - **Use Cases**: Gigabytes in a second, 3D video, UHD screens, work/play in cloud, augmented reality
+
+2. **mMTC (Massive Machine-Type Communication)**
+   - **Requirements**: Connection density (10^6 devices/km²)
+   - **Use Cases**: Smart home/building, smart city, sensors
+
+3. **URLLC (Ultra-Reliable Low-Latency Communication)**
+   - **Requirements**: Latency (1 ms), reliability (1-10^-5)
+   - **Use Cases**: Industry automation, mission-critical applications, self-driving cars
+
+**5G Performance Targets:**
+- **Peak data rate**: 20 Gbps downlink, 10 Gbps uplink
+- **User experienced data rate**: 100 Mbps downlink, 50 Mbps uplink
+- **Latency**: 1 ms (URLLC), 4 ms (eMBB)
+- **Mobility**: Up to 500 km/h
+- **Connection density**: 10^6 devices/km²
+- **Energy efficiency**: 100x improvement over 4G
+- **Spectrum efficiency**: 3x improvement over 4G
+- **Area traffic capacity**: 10 Mbps/m²
+
+**5G vs WiFi 6:**
+
+| Aspect | 5G | WiFi 6 |
+|--------|----|----|
+| **Coverage** | Wide Area Network (WAN) | Local Area Network (LAN) |
+| **Modulation** | 256QAM | 1024QAM |
+| **Authentication** | eSIM/SIM | WPA3 Security |
+| **Use Case** | Mission-Critical, Outdoor | Office, Campus, Home |
+| **Cost** | Higher operation cost | Lower operation cost |
+| **Range** | Long range, outdoor | Short range, indoor |
+
+**Private 5G:**
+- Wide-range (indoor/outdoor) high-capacity coverage in dedicated/shared spectrum
+- Enterprise-owned networks
+- Use cases: Industry automation, smart buildings, warehouses
+
+#### 8. Sixth Generation (6G) - Vision
+
+**IMT-2030 Framework (Approved Nov 2023):**
+
+**6 Usage Scenarios:**
+
+1. **Immersive Communication** (Extension of eMBB)
+   - Extended reality, holographic communication
+
+2. **Massive Communication** (Extension of mMTC)
+   - Even larger scale IoT deployments
+
+3. **HRLLC - Hyper Reliable & Low-Latency Communication** (Extension of URLLC)
+   - Even stricter requirements for critical applications
+
+4. **Ubiquitous Connectivity** (NEW)
+   - Coverage everywhere, including remote areas
+   - Non-terrestrial networks (satellites)
+
+5. **AI and Communication** (NEW)
+   - Native AI integration
+   - AI-assisted network operations
+
+6. **Integrated Sensing and Communication** (NEW)
+   - Joint communication and sensing capabilities
+   - Radar and positioning integrated with communication
+
+**6G Capabilities (Target Ranges):**
+- **Peak data rate**: 1 Tbps
+- **User experienced data rate**: 1 Gbps
+- **Latency**: 0.1 - 1 ms
+- **Reliability**: 1-10^-5 to 1-10^-7
+- **Connection density**: 10^6 - 10^8 devices/km²
+- **Mobility**: 500 - 1,000 km/h
+- **Positioning accuracy**: 1 - 10 cm
+- **Spectrum efficiency**: Enhanced beyond 5G
+- **Coverage**: Global including air and sea
+- **Security and resilience**: Enhanced
+- **Sustainability**: Energy-efficient
+- **AI-related capabilities**: Native integration
+- **Sensing-related capabilities**: Integrated sensing
+
+**4 Overarching Aspects:**
+1. Sustainability
+2. Connecting the unconnected
+3. Ubiquitous intelligence
+4. Security and resilience
+
+**6G Technology Areas:**
+- Network Architecture & Control (AI/ML assisted)
+- Edge & Ubiquitous Computing
+- Radio Technology & Signal Processing
+- Optical Networks
+- Network & Service Security
+- Non-Terrestrial Communication
+- Devices & Components
+
+**6G Timeline:**
+- 2023-2024: Framework and requirements
+- 2025-2027: Standards development
+- 2028-2030: Standards enhancement
+- ~2030: Systems deployment (trial systems before)
+
+#### 9. Mobile Network Evolution Statistics
+
+**Market Adoption (2019 data):**
+- 4G: 59% of connections (peak, plateauing)
+- 3G: 20% and declining
+- 5G: 15% and growing rapidly
+- 2G: 5% (legacy)
+
+**5G Adoption Drivers:**
+- Enhanced mobile broadband for consumers
+- IoT and Industry 4.0 applications
+- Private networks for enterprises
+- Network slicing for diverse services
+
+### Key Takeaways
+
+1. **Cellular networks use frequency reuse and cell splitting** to maximize capacity while minimizing power requirements
+
+2. **Hexagonal cell pattern is the ideal theoretical model** though actual deployments vary due to terrain and propagation
+
+3. **Evolution follows ~10 year cycles**: 1G (1980s) → 2G (1990s) → 3G (2000s) → 4G (2010s) → 5G (2020s) → 6G (~2030s)
+
+4. **Each generation increases data rates by ~1000x** while reducing latency and improving other metrics
+
+5. **LTE architecture separates RAN (E-UTRAN) from core (EPC)** enabling flexible deployment and evolution
+
+6. **5G supports three main scenarios**: eMBB (broadband), mMTC (IoT), URLLC (critical apps) with very different requirements
+
+7. **ITU defines vision and requirements; 3GPP develops detailed specifications** in coordinated release cycles
+
+8. **4G brought all-IP networks**; 5G adds native support for diverse services through network slicing
+
+9. **6G extends 5G scenarios and adds new ones**: ubiquitous connectivity, AI integration, integrated sensing
+
+10. **Private 5G and WiFi 6 are complementary**, not competing—5G for wide-area and critical use, WiFi 6 for high-density indoor
+
+11. **Key architectural evolution**: Circuit switching (1G) → Packet switching (2G/3G) → All-IP (4G/5G) → AI-native (6G)
+
+12. **Capacity increase techniques** include cell splitting, sectoring, densification, ICIC, carrier aggregation, and MIMO
+
+13. **Handoff/handover is critical** for maintaining connections as users move between cells—must be seamless
+
+14. **3GPP releases define features**: Release 15 (5G Phase 1), Release 16 (5G Phase 2), Release 17+ (5G-Advanced), Release 20+ (6G)
+
+15. **6G targets Tbps speeds, sub-ms latency, cm-level positioning, and 10^8 devices/km²** with sustainability and AI as core principles
 
 ---
 
