@@ -497,7 +497,288 @@ Physical Layer (many media)
 ---
 
 ## Lecture 2: Physical Layer
-*[TO BE COMPLETED]*
+
+### 1. Signal Fundamentals
+
+#### Signal Representation
+- **Time Domain**: Amplitude vs time (periodic/aperiodic, analog/digital)
+- **Frequency Domain**: Amplitude vs frequency (Fourier analysis)
+- **Bandwidth**:
+  - **Absolute bandwidth**: All frequencies with non-zero power
+  - **Effective bandwidth**: Contains most of the signal energy (more practical)
+  - Higher bandwidth → higher data rate (but requires higher frequency)
+
+#### Electromagnetic Spectrum
+- **Wavelength**: λ = c/f (c = 3×10⁸ m/s)
+- **Frequency ranges**: ELF (3-30 Hz) to THz (> 300 GHz)
+- **5G Frequency Ranges**:
+  - FR1: 410 MHz - 7.125 GHz (sub-6 GHz)
+  - FR2: 24.25 GHz - 71.0 GHz (mmWave)
+
+### 2. Propagation Mechanisms
+
+#### Propagation Modes
+- **Ground wave** (f < 2 MHz): Follows Earth's contour
+- **Sky wave** (2-30 MHz): Ionospheric reflection
+- **Line of Sight** (f > 30 MHz): Direct transmission
+  - LOS distance: d₁ = 3.57√(kh₁) where k = 4/3
+  - Radio horizon: r = 3.57(√(kh₁) + √(kh₂))
+
+#### Path Loss Formulas (CRITICAL for exam)
+```
+Free-space path loss:
+LdB = 20log₁₀(f) + 20log₁₀(d) - 147.56 dB
+  f in MHz, d in meters
+
+Indoor path loss (ITU-R model):
+LdB = 20log₁₀(f) + 10n·log₁₀(d) + Lf(nfloors) - 28 dB
+  n = path loss exponent
+  Lf = floor penetration loss
+```
+
+### 3. Transmission Impairments
+
+#### Attenuation
+- Signal strength decreases with distance
+- Stronger at higher frequencies
+- **Atmospheric absorption**: peaks at 22 GHz (H₂O, O₂)
+
+#### Multipath Effects
+- **Causes**: Reflection, scattering, diffraction
+- **Result**: Multiple signal copies arrive at different times
+- **Intersymbol Interference (ISI)**: Unwanted effect when symbols overlap
+
+#### Fading Types
+- **Time-based**:
+  - Fast fading: Channel changes rapidly (coherence time Tc < symbol time Ts)
+  - Slow fading: Channel changes slowly (Tc > Ts)
+- **Frequency-based**:
+  - Flat fading: Bandwidth < coherence bandwidth (all frequencies affected equally)
+  - Frequency-selective fading: Bandwidth > coherence bandwidth (different frequencies affected differently)
+- **Channel Models**:
+  - **AWGN**: Additive White Gaussian Noise only
+  - **Rayleigh fading**: No line of sight (NLOS)
+  - **Rician fading**: With line of sight (LOS)
+
+#### Noise and SNR
+```
+Thermal noise:
+  N₀ = kT (W/Hz) where k = 1.38×10⁻²³ J/K
+  N = kTB (total noise power)
+  NdBW = -228.6 dBW + 10log₁₀(T) + 10log₁₀(B)
+
+SNR:
+  SNRdB = 10log₁₀(S/N)
+
+Energy per bit to noise ratio:
+  Eb/N₀ = (S/R)/(N₀) = S/(kTR)
+  Higher Eb/N₀ → Lower BER
+```
+
+### 4. Channel Capacity (CRITICAL for exam)
+
+```
+Shannon's Formula (with noise):
+  C = B log₂(1 + SNR) bps
+  - Accounts for noise
+  - Upper bound on capacity
+
+Nyquist Formula (noiseless):
+  C = 2B log₂(M) bps
+  - M = number of signal levels
+  - Practical limit without noise
+
+Feasible signal levels:
+  M = √(1 + SNR)
+
+Spectral efficiency:
+  η = C/B (bps/Hz)
+```
+
+### 5. Antennas
+
+#### Antenna Types
+- **Isotropic**: Radiates equally in all directions (theoretical reference)
+- **Directional**: Concentrates energy in specific direction
+  - Half-wave dipole (λ/2 Hertz antenna)
+  - Quarter-wave dipole (λ/4 Marconi antenna)
+  - Parabolic reflective antenna
+
+#### Antenna Characteristics
+- **Radiation pattern**: 3D representation of power distribution
+- **Beam width**: Angle where power ≥ half of maximum
+- **Antenna gain**: Ratio of radiation intensity vs isotropic antenna
+  - Higher gain → more directional → smaller coverage area
+
+#### Smart Antennas
+- **Switched beam**: Select best beam from predefined set
+- **Adaptive array**: Track and adapt to mobile target movement
+- **Benefits**: Better signal quality, interference reduction
+
+### 6. MIMO (Multiple Input Multiple Output)
+
+#### MIMO Fundamentals
+- **n×m MIMO**: n transmit antennas, m receive antennas
+- **Transmission schemes**:
+  - **Spatial diversity**: Same data on multiple antennas (reliability)
+  - **Spatial multiplexing**: Different data on different antennas (capacity)
+
+#### Types of MIMO
+- **SU-MIMO**: Single user
+- **MU-MIMO**:
+  - Uplink (multiple access): Multiple users transmit to base station
+  - Downlink (broadcast): Base station transmits to multiple users
+- **Massive MIMO**: Base station with tens/hundreds of antennas
+
+#### Beamforming
+- **Definition**: Track and direct narrow antenna beam to mobile target
+- **Benefits**:
+  - Higher SNR at receiver
+  - Interference prevention
+  - Higher network efficiency
+- **Beam management**: Beam sweep → measurement → determination → report
+- **FD-MIMO (3D-MIMO)**: Vary beam in azimuth AND elevation
+
+#### Massive MIMO Challenges
+- High computational complexity
+- Complex channel estimation
+- Pilot contamination
+
+### 7. Modulation (Digital Data → Analog Signals)
+
+#### Basic Modulation Techniques
+| Technique | Varies | Example |
+|-----------|--------|---------|
+| **ASK** | Amplitude | 0: low amplitude, 1: high amplitude |
+| **FSK** | Frequency | 0: frequency f₁, 1: frequency f₂ |
+| **PSK** | Phase | 0: phase 0°, 1: phase 180° |
+
+#### Multilevel Modulation
+- **Purpose**: Increase data rate without increasing bandwidth
+- **MASK**: Multiple amplitude levels
+- **MFSK**: Multiple frequency levels
+- **MPSK**: Multiple phase shifts
+  - BPSK (2 levels): 1 bit/symbol
+  - QPSK (4 levels): 2 bits/symbol
+  - 8-PSK (8 levels): 3 bits/symbol
+  - 16-PSK (16 levels): 4 bits/symbol
+- **QAM**: Combines ASK and PSK (varies amplitude AND phase)
+  - 16-QAM, 64-QAM, 256-QAM, 1024-QAM
+
+#### Key Concepts
+```
+Symbol rate vs data rate:
+  Data rate (bps) = Symbol rate (baud) × log₂(M)
+  where M = number of signal levels
+
+Constellation diagram:
+  - Plots I(t) vs Q(t) (in-phase vs quadrature)
+  - Shows all possible signal states
+  - Distance between points affects error probability
+```
+
+#### Modulation Trade-offs
+- **Higher M** (more levels):
+  - ✓ Higher data rate
+  - ✗ More susceptible to noise
+  - ✗ Requires higher SNR
+- **Lower M** (fewer levels):
+  - ✓ More robust to noise
+  - ✗ Lower data rate
+
+### 8. Encoding
+
+#### Analog → Digital (Digitization)
+**Pulse Code Modulation (PCM)**:
+1. **Sampling**: Sample at rate fs > 2fm (Nyquist theorem)
+2. **Quantization**: Map samples to discrete levels
+3. **Encoding**: Convert to binary
+
+**Delta Modulation**:
+- Approximates signal with staircase function
+- Step size δ determines accuracy
+- Simpler than PCM but less accurate
+
+#### Digital → Digital (Line Coding)
+**Manchester Encoding** (used in Ethernet):
+- Transition in middle of each bit period
+- 0: high-to-low transition
+- 1: low-to-high transition
+- Requires 2× bandwidth (disadvantage)
+- Self-clocking (advantage)
+
+**Differential Manchester**:
+- Transition for 0, no transition for 1
+- Used in Token Ring
+
+### 9. Duplexing (IMPORTANT for comparisons)
+
+| Aspect | FDD | TDD |
+|--------|-----|-----|
+| **Full name** | Frequency Division Duplexing | Time Division Duplexing |
+| **Separation** | Different frequency bands | Different time slots |
+| **Spectrum** | Paired (UL and DL bands) | Unpaired (same band) |
+| **Guard** | Guard band between UL/DL | Guard time between UL/DL |
+| **Flexibility** | Fixed UL/DL ratio | Dynamic UL/DL ratio |
+| **Best for** | Symmetric traffic | Asymmetric traffic |
+| **MIMO** | Complex channel reciprocity | Better channel reciprocity |
+| **Interference** | Less interference | Potential UL/DL interference |
+| **Cost** | Higher (needs duplexer) | Lower (simpler RF) |
+
+**When to use**:
+- **FDD**: Continuous traffic, symmetric data, wider coverage
+- **TDD**: Bursty traffic, asymmetric data, better for massive MIMO
+
+### 10. Channel Correction Mechanisms
+
+#### Forward Error Correction (FEC)
+- Receiver detects AND corrects errors
+- Adds redundancy at transmitter
+- Examples: Hamming codes, convolutional codes, turbo codes, LDPC
+
+#### Adaptive Equalization
+- Linear equalizer circuit with adjustable taps
+- Combats ISI from multipath
+- Adapts to time-varying channel
+
+#### Adaptive Modulation and Coding (AMC)
+- Switch modulation scheme based on channel conditions
+- Good channel → higher order modulation (64-QAM, 256-QAM)
+- Poor channel → lower order modulation (QPSK, 16-QAM)
+- Maximizes throughput while maintaining quality
+
+#### Diversity Techniques
+- Exploit independent fading on different channels
+- **Space diversity**: Multiple antennas at different locations
+- **Frequency diversity**: Transmit on multiple frequencies
+- **Time diversity**: Transmit at different times (with interleaving)
+
+### 11. Coverage vs Data Rate Trade-off
+
+```
+Frequency ↑ → Coverage ↓ (higher path loss)
+Bandwidth ↑ → Frequency ↑ (need more spectrum at higher bands)
+Data Rate ↑ → Bandwidth ↑ (Shannon/Nyquist)
+
+Therefore: Higher data rates → Higher frequencies → Lower coverage
+```
+
+### 12. mmWave Challenges (5G FR2)
+
+**Frequency range**: 30-300 GHz (wavelength 1-10 mm)
+
+**Challenges**:
+- Limited coverage (high path loss)
+- NLOS difficulties (blockage by obstacles)
+- Mobility problems (beam tracking)
+- High power consumption
+- Susceptible to atmospheric absorption
+
+**Solutions**:
+- Beamforming and beam tracking
+- Small cell deployment
+- Carrier aggregation
+- Dual connectivity (combine with sub-6 GHz)
 
 ### Key Learning Questions:
 - What is a signal?
