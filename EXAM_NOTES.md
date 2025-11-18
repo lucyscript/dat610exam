@@ -172,14 +172,226 @@ Each lecture has specific learning questions that guide exam preparation:
 ---
 
 ## Lecture 7: WPAN, WLAN, LPWAN
-*[TO BE COMPLETED]*
 
-### Key Learning Questions:
-- What are WiFi and 802.11?
-- Physical and data link layer technologies for 802.11 versions?
-- How does 802.11 architecture work?
-- Different PAN technologies? Differences? Architectures?
-- Different LPWAN technologies? Differences?
+### WLAN (IEEE 802.11 / WiFi)
+
+#### Key 802.11 Standards
+**Standard** | **Freq** | **Year** | **Max Speed** | **Key Features**
+802.11a | 5 GHz | 1999 | 54 Mbps | OFDM, not compatible with b/g
+802.11b | 2.4 GHz | 1999 | 11 Mbps | DSSS, longer range than 802.11a
+802.11g | 2.4 GHz | 2003 | 54 Mbps | Backward compatible with 802.11b
+802.11n | 2.4/5 GHz | 2009 | 150-600 Mbps | MIMO-OFDM (multiple antennas)
+802.11ac | 5 GHz | 2014 | Up to 6.93 Gbps | Up to 8 spatial streams, 256-QAM
+802.11ax (Wi-Fi 6) | 2.4/5/6 GHz | 2021 | Up to 9.6 Gbps | OFDMA, 1024-QAM, 6 GHz band
+802.11be (Wi-Fi 7) | 2.4/5/6 GHz | 2025 | Up to 46 Gbps | 16 spatial streams, 4096-QAM, MLO
+
+#### 802.11 Architecture
+- **IEEE 802 Stack**: LLC (Logical Link Control) + MAC + PLCP + PMD
+  - LLC: Interface to higher layers, addressing, error control
+  - MAC: Media Access Control (CSMA/CA)
+  - PLCP: Physical Layer Convergence - maps MAC frames, synchronization, signaling
+  - PMD: Physical Medium Dependent - transmitting/receiving data
+
+- **Network Topologies**:
+  - **BSS (Basic Service Set)**: Single AP interconnecting wireless clients
+  - **ESS (Extended Service Set)**: Multiple BSSs interconnected via distribution system
+  - **BSSID**: MAC address of AP's NIC
+  - **SSID**: Network name (e.g., "eduroam")
+
+#### 802.11 PHY Layer
+**PHY data rate determined by**:
+- **Channel Width**: 20, 40, 80, 160, 320 MHz
+- **Modulation and Coding Scheme (MCS)**: BPSK, QPSK, 16-QAM, 64-QAM, 256-QAM, 1024-QAM, 4096-QAM
+- **Number of Spatial Streams (SS)**: 1-16 (via MIMO)
+- **Guard Interval (GI)**: Prevents inter-symbol interference
+
+**Transmission Schemes**: DSSS, OFDM, MIMO-OFDM, OFDMA
+
+#### 802.11 MAC Layer - CSMA/CA with RTS/CTS
+**Why CA instead of CD?**
+- WLANs are half-duplex (cannot listen while sending)
+- Impossible to detect collisions during transmission
+
+**CSMA/CA Process**:
+1. **Carrier Sense**: Listen if channel is idle
+2. **RTS** (Ready to Send) - optional: Request dedicated channel access
+3. **CTS** (Clear to Send) - optional: AP grants channel access
+4. **Random backoff** if channel busy (Collision Avoidance)
+5. **Transmit data**
+6. **ACK**: All transmissions acknowledged; no ACK = assumed collision, restart
+
+**Solves**: Hidden and exposed terminal problems
+
+#### 802.11 Security
+**Authentication Methods**:
+- **WEP** (Wired Equivalent Privacy): RC4 encryption, NEVER USE - broken
+- **WPA** (Wi-Fi Protected Access): TKIP encryption, Message Integrity Check (MIC)
+- **WPA2**: AES encryption with CCMP (Counter Cipher Mode with Block Chaining Message Authentication Code)
+  - **Personal**: Pre-Shared Key (PSK) for home networks
+  - **Enterprise**: 802.1X/EAP authentication via RADIUS server
+- **WPA3**: Latest, strongest security
+  - **Personal**: SAE (Simultaneous Authentication of Equals) - prevents brute force
+  - **Enterprise**: 192-bit cryptographic suite, 802.1X/EAP
+  - **Open Networks**: OWE (Opportunistic Wireless Encryption)
+  - **IoT**: DPP (Device Provisioning Protocol) replaces WPS
+
+**Encryption Protocols**:
+- **TKIP**: WPA, changes key per packet
+- **AES-CCMP**: WPA2, strongest current standard
+
+---
+
+### WPAN (Wireless Personal Area Networks)
+
+#### Bluetooth (IEEE 802.15.1)
+**Characteristics**:
+- 2.4 GHz ISM band
+- Range: ~10 meters
+- Low power, low cost
+- Managed by Bluetooth Special Interest Group
+
+**Network Topology**:
+- **Piconet**: 1 Master + up to 7 active slaves, shared frequency hopping
+- **Scatternet**: Multiple interconnected piconets via bridge devices
+- **Master**: Determines channel access, frequency hopping, timing (TDD)
+- **Slaves**: Communicate only with master
+
+**Bluetooth Profiles** (Usage Models):
+- **HSP/HFP**: Headset/Hands-free calling
+- **A2DP**: Stereo audio streaming
+- **AVRCP**: Audio/video remote control
+- **SPP**: Serial port emulation
+- **HID**: Keyboards, mice
+
+**Specifications**:
+- **PHY**: GFSK modulation, 2.4 GHz ISM band, 1 MHz carrier spacing
+- **Baseband**: FH-TDD-TDMA for piconet, FH-CDMA for scatternet
+- **Data Rate**: 1 Mbps (BR), 2-3 Mbps (EDR)
+- **Versions**:
+  - 2.0 (EDR), 3.0 (High Speed + 802.11)
+  - 4.0 (Low Energy), 5.0 (4x range, 2x speed, IoT)
+
+#### ZigBee (IEEE 802.15.4)
+**Characteristics**:
+- Sub-GHz ISM bands: 868 MHz, 915 MHz, 2.4 GHz
+- Low data rate, long battery life
+- Maintained by Zigbee Alliance
+
+**Architecture**:
+- **IEEE 802.15.4**: Defines PHY and MAC
+- **ZigBee**: Adds NWK, APS, ZDO, Application layers
+  - **NWK**: Addressing, routing, network formation
+  - **APS**: Reliable delivery, binding, group management
+  - **ZDO**: Device role, network management, security
+  - **ZCL**: Standard clusters for interoperability
+
+**Network Topologies**:
+- **Star**: Coordinator + end devices
+- **Mesh**: AODV-like routing (AODVjr) for low power
+- **Cluster Tree**: Hierarchical tree-based routing
+
+**Device Types**:
+- **Coordinator**: Manages network, assigns addresses
+- **Routers**: Relay messages
+- **End Devices**: Send/receive data
+
+**Network Types**:
+- **Non-beacon**: No time sync, routers always on, mesh topology
+- **Beacon-based**: Periodic beacons, star or tree topology
+
+#### 6LoWPAN (IPv6 over Low-Power WPAN)
+**Purpose**: Enable IPv6 on resource-constrained IoT devices
+
+**Key Features**:
+- Based on IEEE 802.15.4 PHY/MAC
+- IETF specification: RFC 4944
+- **Adaptation Layer**: Header compression and fragmentation (RFC 6282)
+  - MTU: 1280 bytes → 127 bytes
+  - Address: 128 bits → 64/16 bit MAC addresses
+- Enables IP connectivity for small, low-power devices
+
+---
+
+### LPWAN (Low-Power Wide Area Networks)
+
+**Characteristics**: Long-range, low data rate, high connectivity, low power, low cost
+
+#### LoRa / LoRaWAN
+**LoRa (Physical Layer)**:
+- **Proprietary**: Developed by Semtech, maintained by LoRa Alliance
+- **Range**: 2-5 km urban, 15 km rural
+- **Modulation**: CSS (Chirp Spread Spectrum) - sweeping frequency
+  - Cheaper than DSSS (no accurate sync)
+  - FEC codes for resilience
+- **Bands**: Sub-GHz ISM (868, 915, 433 MHz)
+- **Data Rate**: 0.3 - 27 Kbps
+- **Battery**: Years on small batteries
+
+**LoRaWAN (MAC/Network Layer)**:
+- Cloud-based MAC, centralized control via network server
+- Devices transmit asynchronously to multiple gateways
+- **Device Classes**:
+  - **Class A**: Uplink first, downlink only after uplink (most energy-efficient)
+  - **Class B**: Scheduled downlink windows
+  - **Class C**: Almost always listening
+- **Network Server**: Message consolidation, routing, control, supervision
+
+#### NB-IoT (NarrowBand IoT)
+**Characteristics**:
+- **3GPP**: Release 13 (2016), Release 14 (2017)
+- Based on LTE standard subset
+- **Licensed** LTE bandwidth
+- **Narrowband**: Single 180 kHz channel
+- **MAC**:
+  - Downlink: OFDMA (multi-user OFDM)
+  - Uplink: SC-FDMA (single carrier, lower power)
+- **Data Rate**:
+  - Downlink: 26-127 Kbps
+  - Uplink: 17-159 Kbps
+- **Best for**: Stationary, energy-efficient applications
+
+#### LTE-M (LTE Cat-M1)
+**Characteristics**:
+- **3GPP**: Release 12 (2015), 13 (2016), 14 (2017)
+- Based on LTE standard
+- **Licensed** LTE bandwidth (1.4 MHz)
+- **Data Rate**: 1 Mbps (DL and UL)
+
+**Differences from NB-IoT**:
+- **Higher data rate**: 1 Mbps vs 26-159 Kbps
+- **Higher mobility**: Full mobility with handovers
+- **Higher bandwidth**: >1 MHz vs 180 kHz
+- **Voice support**: VoLTE capable
+- **Higher cost**
+- **Use cases**: Wearables, trackers, VoLTE devices
+
+**Comparison Summary**:
+- **LoRa**: Unlicensed, longest range, lowest cost, proprietary
+- **NB-IoT**: Licensed, best battery life, stationary devices
+- **LTE-M**: Licensed, mobility support, voice capable, higher data rate
+
+---
+
+### Key Exam Points
+
+**WLAN**:
+- Know 802.11 standard evolution and key features
+- Understand CSMA/CA mechanism and why CD doesn't work
+- BSS vs ESS architecture
+- Security progression: WEP → WPA → WPA2 → WPA3
+- PHY parameters: channel width, MCS, spatial streams
+
+**WPAN**:
+- Bluetooth: piconet/scatternet structure, master-slave
+- ZigBee: coordinator/router/device roles, topologies (star/mesh/tree)
+- 6LoWPAN: IPv6 over constrained devices, header compression
+
+**LPWAN**:
+- LoRa/LoRaWAN: Proprietary, CSS modulation, unlicensed, device classes
+- NB-IoT: 3GPP, licensed, narrowband (180 kHz), stationary
+- LTE-M: 3GPP, licensed, wider bandwidth, mobility, voice
+
+**Compare technologies**: Know trade-offs between range, data rate, power, cost, mobility
 
 ---
 
