@@ -183,6 +183,143 @@ Each lecture has specific learning questions that guide exam preparation:
 
 ---
 
+## Lecture 10: IoT Part 2 (Application Layer Protocols & Platforms)
+
+### MQTT Protocol (Message Queuing Telemetry Transport)
+
+**Architecture - Publish-Subscribe Mechanism**:
+- **Publishers**: Produce data and send to broker
+- **Subscribers**: Subscribe to topics of interest, receive notifications when new messages available
+- **Broker**: Filters data based on topic and distributes to subscribers
+  - Examples: Mosquitto, HiveMQ
+
+**Key Characteristics**:
+- **Publish/Subscribe paradigm** (vs Request/Response)
+- **One-to-Many** communication pattern
+- Clients don't know each other (decoupled)
+- Every client can both publish AND subscribe
+- **PUSH information paradigm** (broker pushes to subscribers)
+
+**MQTT vs CoAP**:
+- MQTT: PUSH-based, broker-centric, pub-sub model
+- CoAP: PULL-based, request-response, no broker needed
+
+---
+
+### CoAP (Constrained Application Protocol)
+
+**Purpose**: Enable web-based services in constrained wireless networks
+- Designed for 8-bit microcontrollers
+- Limited memory devices
+- Low-power networks
+
+**Key Characteristics**:
+- **Request-Response interaction model** (similar to HTTP)
+- Implements **REST** (Representational State Transfer)
+- **PULL information paradigm** (client pulls from server)
+- Resources identified by URIs
+- Much lighter than HTTP for IoT devices
+
+**CoAP Methods** (similar to HTTP):
+- GET: Retrieve resource
+- POST: Create resource
+- PUT: Update resource
+- DELETE: Remove resource
+
+**CoAP Architecture Features**:
+- **Proxying and Caching**: Cross-protocol proxy mechanisms enable HTTP-CoAP interactions
+- Only supports limited subset of HTTP functionality
+- Proxies provide data caching for efficiency
+
+**CoAP vs HTTP**:
+- CoAP: UDP-based, lightweight, designed for constrained devices
+- HTTP: TCP-based, feature-rich, designed for traditional web
+
+---
+
+### IoT Platforms (Cloud-based)
+
+**Basic Structure** (ISO/IEC JTC1):
+1. **Things Layer**: Data gathering, discovery (Data → Information → Knowledge)
+2. **Networking Layer**: Data transmission
+3. **Platform Layer**: Computing, processing (Data → Information → Knowledge)
+4. **User Layer**: Customer-facing, wisdom generation
+
+**Four Essential Features**:
+
+1. **Device Management**
+   - Connect devices to the cloud
+   - Configure devices remotely
+   - Update firmware (OTA - Over-The-Air)
+   - Monitor device health and status
+
+2. **Data Management**
+   - Store and retrieve data
+   - Manage events
+   - Visualize data
+   - Share data across services
+
+3. **Data Analysis/Automation**
+   - Statistical analysis
+   - Data mining
+   - Machine learning
+   - Event processing and rules engine
+
+4. **Security**
+   - Confidentiality (encryption)
+   - Integrity (data and system protection)
+   - Availability (system uptime)
+   - Authenticity (identity verification)
+   - Accountability (audit trails)
+
+**Types of IoT Platforms**:
+
+**Specialized Platforms**:
+- Focus on one specific feature (e.g., device management)
+- Device-specific functionality
+- Strong security focus
+- **Best for**: Connectivity management, device configuration, OTA firmware updates
+
+**Generalized Platforms**:
+- Many features implemented
+- Two main approaches:
+  - **Native IoT platforms**: Evolved from specialized platforms
+  - **Cloud-based IoT platforms**: Traditional cloud solutions adapted for IoT
+- Excellent data management
+- Interface well with corporate IT solutions
+- **Best for**: Data mining, machine learning, data fusion, event processing, rules engine
+
+**Examples**:
+- **Major Vendors**: IBM (Bluemix IoT), Microsoft (Azure IoT), Amazon (AWS IoT), Google (Cloud IoT), Intel
+- **Specialized**: Thingspeak, The Things Network
+- **Choice depends on application requirements**
+
+---
+
+### Exam-Relevant Comparisons
+
+| Feature | MQTT | CoAP |
+|---------|------|------|
+| **Paradigm** | Publish-Subscribe | Request-Response |
+| **Architecture** | Broker-based | Client-Server (no broker) |
+| **Communication** | PUSH (broker to subscribers) | PULL (client requests) |
+| **Pattern** | One-to-Many | One-to-One |
+| **Coupling** | Clients decoupled | Direct client-server |
+| **Use Case** | Event notification, telemetry | Resource access, device control |
+
+**MQTT Advantages**:
+- Efficient for event-driven data
+- Scales well with many subscribers
+- Clients don't need to know each other
+
+**CoAP Advantages**:
+- No broker needed (simpler architecture)
+- RESTful (familiar web paradigm)
+- Works with HTTP proxies
+- Lightweight for constrained devices
+
+---
+
 ## Guest Lectures
 
 ### IIoT and Applications
