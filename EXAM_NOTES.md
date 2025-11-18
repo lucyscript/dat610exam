@@ -183,6 +183,122 @@ Each lecture has specific learning questions that guide exam preparation:
 
 ---
 
+## Lecture 8: Wireless Network Tools
+
+### Tool Categories and Purpose
+
+#### 1. Network Analysis & Monitoring Tools
+- **Wireshark**: Packet analyzer (GUI-based) - captures and analyzes network traffic
+- **Tcpdump**: CLI packet analyzer - command-line traffic capture
+- **PRTG**: SNMP-based network monitoring for intermediate devices
+- **Unix Tools**:
+  - `ping`: ICMP-based connectivity testing
+  - `traceroute`: Path discovery to destination
+  - `iperf`: Network performance measurements
+  - `netstat`, `nslookup`, `ifconfig`, `nmap`: Network configuration and scanning
+
+#### 2. Network Simulation vs Emulation
+- **Simulators**: Model network behavior mathematically
+  - **Cisco Packet Tracer**: Visual network simulator (cross-platform)
+  - **ns-3**: Discrete event network simulator (with app store)
+  - **OMNet++**: Discrete event simulator (with INET framework)
+  - Use: Research, education, protocol development
+
+- **Emulators**: Run actual network code/software
+  - **GNS3**: Network software emulator (runs real network OS images)
+  - **Mininet**: Network emulator for SDN/OpenFlow
+  - Use: Testing real configurations before deployment
+
+#### 3. SDN (Software-Defined Networking) Tools
+- **Mininet**: SDN network emulator
+  - Lightweight virtual network on single machine
+  - OpenFlow protocol support
+- **ComNetsEmu**: Enhanced Mininet variant
+  - SDN/NFV emulation capabilities
+  - Network slicing support
+  - Integration with 5G emulators
+
+#### 4. NFV (Network Function Virtualization) Architecture
+- **NFVO (NFV Orchestrator)**:
+  - **ETSI Open Source MANO (OSM)**: Industry-standard NFVO
+  - Manages network services lifecycle
+- **VIM (Virtual Infrastructure Manager)**:
+  - **OpenStack**: VM orchestration platform
+  - **Kubernetes**: Container orchestration platform
+- **Purpose**: Virtualize network functions (firewall, load balancer, etc.)
+
+#### 5. Virtualization Technologies
+- **VM Creation**: VirtualBox, VMware
+- **Container Creation**: Docker
+- **VM Orchestration**: OpenStack
+- **Container Orchestration**: Kubernetes
+- **Key Difference**:
+  - VMs: Full OS virtualization (heavier)
+  - Containers: OS-level virtualization (lighter, faster)
+
+#### 6. MEC (Multi-access Edge Computing) Tools
+- **AdvanteEdge**: Mobile edge emulation platform
+- **OpenNESS**: Open Network Edge Services Software (discontinued)
+- **Purpose**: Bring computation closer to users for low latency
+
+#### 7. 5G Development & Testing Tools
+
+**Simulation Tools**:
+- **Matlab 5G Toolbox**: Physical layer modeling
+- **simu5G** (OMNet++): 5G network simulation
+- **5G-LENA** (ns-3): 5G NR simulation
+
+**Emulation/Deployment Tools**:
+- **OpenAirInterface**: Open-source 5G software stack
+- **UERANSIM**: 5G UE/RAN simulator
+- **Open5GS**: Open-source 5G Core Network
+
+**Field Testing**:
+- **G-NetTrack, CellMapper**: Cell tower mapping and signal analysis
+- **Android Code**: `*#*#4636#*#*` - Advanced cellular settings
+  - View: NR state, frequency, bandwidth, signal strength, network type
+
+#### 8. Security Testing Tools
+- **SEED Security Labs**: Hands-on security exercises
+  - Network security labs
+  - Protocol security testing
+- **Purpose**: Understanding network vulnerabilities and attacks
+
+### Key Concepts for Exam
+
+**Tool Selection Criteria**:
+- **Packet Analysis**: Use Wireshark for detailed inspection, Tcpdump for automation
+- **Network Testing**: Simulators (ns-3, OMNet++) for research; emulators (GNS3, Mininet) for realistic testing
+- **SDN/NFV**: Mininet for SDN, OSM for NFV orchestration
+- **5G**: simu5G/5G-LENA for simulation, OpenAirInterface for actual deployment
+
+**Important Distinctions**:
+1. **Simulator vs Emulator**:
+   - Simulator = Mathematical models
+   - Emulator = Real software/code execution
+2. **VMs vs Containers**:
+   - VMs = Full OS isolation, heavier
+   - Containers = Shared kernel, lighter
+3. **SDN vs NFV**:
+   - SDN = Control plane separation (network programmability)
+   - NFV = Virtualize network functions (software-based)
+
+**Real-World Applications**:
+- **Private 5G Networks**: OpenAirInterface + Open5GS
+- **Network Slicing**: ComNetsEmu, Kubernetes
+- **Edge Computing**: MEC platforms for low-latency applications
+- **Network Security**: SEED labs for vulnerability assessment
+
+### Practical Examples at UiS
+- **Lyse's 5G Testbed**: Private 5G network with Radio Units at Innoasis, UiS, and hospital
+- **5G-MODaNeI Project**:
+  - Multi-access Edge Computing research
+  - AI-based resource orchestration
+  - Security and dependability focus
+  - Equipment: Radio Units, edge servers with GPUs, carrier-grade switches
+
+---
+
 ## Guest Lectures
 
 ### IIoT and Applications
