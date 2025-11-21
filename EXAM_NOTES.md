@@ -1003,16 +1003,303 @@ Therefore: Higher data rates → Higher frequencies → Lower coverage
 ---
 
 ## Lecture 3: Data Link Layer (MAC)
-*[TO BE COMPLETED]*
 
-### Key Learning Questions:
-- Issues of accessing shared medium?
-- How are multiple access schemes categorized?
-- What is CSMA? Why multiple versions?
-- Hidden and exposed terminal problems? Solutions?
-- What is CDMA?
-- What are OFDM, OFDMA, SC-OFDMA?
-- Pros and cons of CDMA vs OFDMA?
+### 1. Shared Medium Access Problem
+
+**The Problem**: Multiple users sharing same wireless channel need coordination to avoid collisions
+- Wireless is a **broadcast medium** - all nodes can hear each other (in range)
+- **Collisions** occur when two transmissions overlap → data lost
+- Need **Medium Access Control (MAC)** protocols to coordinate access
+
+---
+
+### 2. Multiple Access Schemes Classification ⭐ EXAM IMPORTANT
+
+| Category | Approach | Examples |
+|----------|----------|----------|
+| **Contention-based** | Compete for channel, handle collisions | ALOHA, CSMA, CSMA/CD, CSMA/CA |
+| **Conflict-free** | Pre-allocate resources, no collisions | FDMA, TDMA, CDMA, OFDMA |
+| **Hybrid** | Combine both approaches | PRMA, D-TDMA, RAMA |
+
+**Fixed vs Random Access**:
+- **Fixed assignment**: Deterministic, guaranteed access, may waste capacity
+- **Random access**: Dynamic, efficient for bursty traffic, risk of collisions
+
+---
+
+### 3. ALOHA Protocols
+
+**Pure ALOHA**:
+- Transmit whenever data available
+- If collision → wait random time, retransmit
+- **Throughput**: S = G·e^(-2G), max ~18.4% at G=0.5
+
+**Slotted ALOHA**:
+- Time divided into slots; transmit only at slot boundaries
+- **Throughput**: S = G·e^(-G), max ~36.8% at G=1
+- Double the efficiency of pure ALOHA
+
+---
+
+### 4. CSMA (Carrier Sense Multiple Access) ⭐ EXAM CRITICAL
+
+**Key Principle**: "Listen before talk" - sense channel before transmitting
+
+#### CSMA Variants:
+
+| Version | Behavior when Channel Busy | Behavior when Channel Idle | Efficiency |
+|---------|---------------------------|---------------------------|------------|
+| **1-persistent** | Wait until idle, transmit immediately | Transmit with probability 1 | High collision risk |
+| **Non-persistent** | Wait random time, then sense again | Transmit immediately | Lower collision, higher delay |
+| **p-persistent** | Wait until idle | Transmit with probability p; defer with (1-p) | Balanced approach |
+
+**Why multiple versions?** Trade-off between:
+- **Delay** (how long to wait)
+- **Collision probability** (risk of simultaneous transmission)
+
+---
+
+### 5. CSMA/CD (Collision Detection) ⭐ EXAM TOPIC
+
+**Used in**: Wired Ethernet (802.3)
+
+**Key Concept**: Detect collision while transmitting, abort immediately
+
+**Algorithm**:
+1. Sense channel (carrier sense)
+2. If idle → transmit
+3. **While transmitting, monitor for collision**
+4. If collision detected → abort, send jam signal
+5. Wait random backoff time, retry
+
+**Minimum Frame Size**: Must be large enough to detect collision
+- **t = 2τ** (round-trip propagation delay)
+- Frame transmission time must be ≥ 2τ
+
+**Binary Exponential Backoff**:
+- After collision k: wait random time in [0, 2^k - 1] × slot_time
+- Maximum k = 10, then give up after 16 attempts
+
+**Why NOT used in wireless?**
+- Cannot detect collision while transmitting (transmitter overwhelms receiver)
+- Hidden terminal problem makes detection unreliable
+
+---
+
+### 6. CSMA/CA (Collision Avoidance) ⭐⭐ VERY EXAM IMPORTANT
+
+**Used in**: WiFi (802.11), wireless networks
+
+**Key Concept**: Avoid collisions rather than detect them
+
+#### Basic DCF (Distributed Coordination Function):
+
+```
+DIFS → Data → SIFS → ACK
+```
+
+- **DIFS** (DCF InterFrame Space): Wait period before transmitting
+- **SIFS** (Short InterFrame Space): Short wait for ACK (higher priority)
+- **NAV** (Network Allocation Vector): Virtual carrier sensing timer
+
+#### RTS/CTS Mechanism (Solves Hidden Terminal):
+
+```
+Sender: DIFS → RTS → [wait]
+Receiver:        SIFS → CTS → [wait]
+Sender:                 SIFS → Data → [wait]
+Receiver:                      SIFS → ACK
+```
+
+- **RTS** (Request to Send): Sender requests channel
+- **CTS** (Clear to Send): Receiver grants permission
+- All nodes hearing RTS/CTS set NAV → defer transmission
+
+---
+
+### 7. Hidden and Exposed Terminal Problems ⭐⭐ EXAM CRITICAL
+
+#### Hidden Terminal Problem:
+
+```
+    A ←→ B ←→ C
+    (A and C cannot hear each other)
+```
+
+- **Problem**: A transmits to B; C cannot sense A's transmission
+- C thinks channel is idle, transmits → **collision at B**
+- **Solution**: RTS/CTS handshake
+  - C hears CTS from B → knows to wait
+
+#### Exposed Terminal Problem:
+
+```
+    A ← B → C → D
+    (B transmitting to A; C wants to transmit to D)
+```
+
+- **Problem**: C senses B's transmission to A
+- C defers even though transmitting to D would NOT cause collision
+- **Result**: Unnecessary waiting, reduced throughput
+- **Note**: RTS/CTS does NOT fully solve this
+
+---
+
+### 8. CDMA (Code Division Multiple Access) ⭐ EXAM TOPIC
+
+**Key Concept**: All users transmit simultaneously on same frequency using unique codes
+
+#### Spread Spectrum Techniques:
+
+**FHSS (Frequency Hopping Spread Spectrum)**:
+- Transmitter/receiver hop between frequencies in synchronized pattern
+- Pattern determined by **pseudonoise (PN) sequence**
+
+**DSSS (Direct Sequence Spread Spectrum)**:
+- Each bit multiplied by spreading code (chips)
+- Signal spread across wider bandwidth
+- **Processing Gain**: PG = chip rate / data rate
+
+#### PN Sequence Properties (EXAM IMPORTANT):
+
+1. **Balance**: Equal number of 1s and 0s (differ by at most 1)
+2. **Run property**: Half of runs length 1, quarter length 2, etc.
+3. **Autocorrelation**: High peak at zero shift, low elsewhere
+
+**Maximum Length Sequence (m-sequence)**:
+- Generated by Linear Feedback Shift Register (LFSR)
+- Period: **p = 2^n - 1** (n = number of registers)
+
+#### Orthogonal Codes (Walsh-Hadamard):
+
+- **Orthogonality**: Cross-correlation = 0
+- Each user assigned unique code
+- Receiver can separate users by correlation with known code
+
+**Walsh-Hadamard Matrix Construction**:
+```
+H₁ = [1]
+H₂ₙ = | Hₙ   Hₙ  |
+      | Hₙ  -Hₙ  |
+```
+
+---
+
+### 9. OFDM (Orthogonal Frequency Division Multiplexing) ⭐ EXAM IMPORTANT
+
+**Key Concept**: Divide wideband channel into many narrow orthogonal subcarriers
+
+**Orthogonality**:
+- Subcarriers spaced at 1/Ts (Ts = symbol duration)
+- Peak of one subcarrier aligns with nulls of others
+- Allows overlap without interference
+
+**Implementation**:
+- **Transmitter**: IFFT (converts frequency domain → time domain)
+- **Receiver**: FFT (converts time domain → frequency domain)
+
+**Cyclic Prefix (Guard Interval)**:
+- Copy end of symbol to beginning
+- **Eliminates ISI** (Inter-Symbol Interference) from multipath
+- Trade-off: Reduces spectral efficiency
+
+**PAPR (Peak-to-Average Power Ratio) Problem**:
+- OFDM has high PAPR due to multiple subcarrier summation
+- Requires linear amplifiers (less power efficient)
+
+---
+
+### 10. OFDMA (Orthogonal Frequency Division Multiple Access)
+
+**Key Concept**: OFDM + multi-user access via subcarrier allocation
+
+- Divide subcarriers into **subchannels**
+- Assign different subchannels to different users
+- Users can be allocated based on channel conditions
+
+**Advantages**:
+- Flexible resource allocation
+- Multi-user diversity gain
+- Efficient for varying traffic patterns
+
+---
+
+### 11. SC-FDMA (Single Carrier FDMA) ⭐ EXAM TOPIC
+
+**Used in**: LTE uplink, 5G NR uplink
+
+**Key Difference from OFDMA**:
+- Adds **DFT precoding** before IFFT
+- Results in **lower PAPR** than OFDMA
+- More power efficient for mobile devices (important for battery)
+
+**Why used in uplink?**
+- Mobile devices have limited battery/power
+- Lower PAPR = more efficient power amplifier usage
+
+---
+
+### 12. CDMA vs OFDMA Comparison ⭐ EXAM TOPIC
+
+| Aspect | CDMA | OFDMA |
+|--------|------|-------|
+| **Multiplexing** | Code domain | Frequency domain |
+| **Interference** | All users interfere (managed by codes) | Orthogonal subcarriers (no interference) |
+| **Near-far problem** | Significant (needs power control) | Less severe |
+| **Flexibility** | Fixed spreading factor | Dynamic subcarrier allocation |
+| **Spectral efficiency** | Good with RAKE receiver | Very high |
+| **Complexity** | Moderate | Higher (FFT/IFFT) |
+| **Multipath** | RAKE receiver exploits | Cyclic prefix handles |
+
+---
+
+### 13. NOMA (Non-Orthogonal Multiple Access)
+
+**5G Technology**: Allow more users than orthogonal resources
+
+**Key Techniques**:
+- **Superposition coding**: Transmit multiple users on same resource
+- **SIC (Successive Interference Cancellation)**: Receiver decodes strongest signal first, subtracts, then decodes weaker signals
+
+---
+
+### Key Exam Formulas & Concepts:
+
+```
+CSMA/CD minimum frame size:
+  Transmission time ≥ 2τ (round-trip delay)
+
+ALOHA throughput:
+  Pure: S = G·e^(-2G), max 18.4%
+  Slotted: S = G·e^(-G), max 36.8%
+
+m-sequence period:
+  p = 2^n - 1 (n = shift register length)
+
+OFDM subcarrier spacing:
+  Δf = 1/Ts (Ts = symbol duration)
+
+Processing Gain (DSSS):
+  PG = Chip rate / Data rate = Bandwidth expansion
+```
+
+---
+
+### Key Learning Questions (Answered):
+
+✓ **Issues of accessing shared medium?** Collisions when multiple users transmit simultaneously; need MAC protocols
+
+✓ **How are multiple access schemes categorized?** Contention-based (ALOHA, CSMA), Conflict-free (TDMA, FDMA, CDMA, OFDMA), Hybrid
+
+✓ **What is CSMA? Why multiple versions?** Carrier sensing before transmit; versions trade off delay vs collision probability
+
+✓ **Hidden and exposed terminal problems? Solutions?** Hidden: nodes can't hear each other, collision at receiver (solved by RTS/CTS); Exposed: unnecessary deferral (harder to solve)
+
+✓ **What is CDMA?** Code-based multiplexing where all users transmit on same frequency with unique spreading codes
+
+✓ **What are OFDM, OFDMA, SC-OFDMA?** OFDM: orthogonal subcarriers via FFT; OFDMA: multi-user subcarrier allocation; SC-FDMA: lower PAPR for uplink
+
+✓ **Pros and cons of CDMA vs OFDMA?** CDMA: simpler, near-far problem; OFDMA: higher spectral efficiency, more complex, flexible allocation
 
 ---
 
