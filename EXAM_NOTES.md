@@ -1308,13 +1308,233 @@ Processing Gain (DSSS):
 ### Why Error Control is Critical in Wireless
 **Problem**: High bit error rates in wireless due to interference, fading, multipath
 - Frame error probability: P₂ = 1 - (1 - Pᵦ)^F
-- Example: Pᵦ=10⁻⁵, F=2046 bits → P₂=0.02 (2% frame error rate!)
+- Example: Pᵦ=10⁻⁵, F=2046 bits → P₂ ≈ 0.02 (2% frame error rate!)
 - **Need**: Both detection AND correction mechanisms
 
 ### Error Control Approaches
-1. **FEC (Forward Error Correction)**: Add redundancy to correct errors at receiver
-2. **BEC (Backward Error Correction)**: Detect errors + ARQ (retransmission)
-3. **Hybrid ARQ**: Combine FEC + ARQ for optimal performance
+1. **FEC (Forward Error Correction)**: Add redundancy to correct errors at receiver - no retransmission needed
+2. **BEC (Backward Error Correction)**: Detect errors + ARQ (retransmission requests)
+3. **Hybrid ARQ (HARQ)**: Combine FEC + ARQ for optimal performance
+
+**When to use FEC vs BEC?**
+- **High BER (bad channel)**: FEC preferred - retransmissions too costly
+- **Low BER (good channel)**: BEC preferred - less overhead
+- **Variable conditions**: Hybrid ARQ adapts to channel quality
+
+---
+
+### Error Detection Methods
+
+**Parity Check**
+- Add single parity bit to make total 1s even (even parity) or odd (odd parity)
+- Detects odd number of bit errors; misses even number of errors
+- Simple but weak protection
+
+**CRC (Cyclic Redundancy Check)**
+- Based on polynomial division in GF(2)
+- Frame Check Sequence (FCS) appended to data
+- Receiver divides received frame by generator polynomial
+- **Remainder = 0**: No error detected; **Remainder ≠ 0**: Error detected
+- Much stronger than parity; detects burst errors effectively
+
+---
+
+### ARQ (Automatic Repeat Request)
+
+**Stop-and-Wait ARQ**
+- Send one frame, wait for ACK before sending next
+- Timeout triggers retransmission
+- **Simple but inefficient** - low throughput, especially with high RTT
+
+**Go-Back-N ARQ**
+- Sender can have up to N frames outstanding (sliding window)
+- Receiver only accepts frames in order
+- **NAK or timeout**: Retransmit ALL frames from error point onwards
+- Wasteful if only one frame corrupted
+- Window size N ≤ 2^k - 1 (k = sequence number bits)
+
+**Selective Repeat ARQ**
+- Both sender and receiver have windows
+- Receiver buffers out-of-order frames
+- **Only retransmit specific corrupted frames**
+- More efficient but requires more receiver buffer
+- Window size N ≤ 2^(k-1)
+
+**ARQ Acknowledgement Types**
+- **Positive ACK**: Confirm correct receipt
+- **Negative ACK (NAK)**: Request specific retransmission
+- **Cumulative ACK**: Acknowledges all frames up to sequence number
+
+---
+
+### Block Codes (n, k)
+
+**Terminology**
+- **(n, k) code**: k data bits encoded to n total bits
+- **r = n - k**: Redundancy bits (parity/check bits)
+- **Code rate R = k/n**: Efficiency (higher = less overhead)
+- **Hamming distance d(a,b)**: Number of bit positions that differ
+- **Minimum distance dmin**: Smallest distance between any two codewords
+
+**Error Detection/Correction Capability**
+- **Detect up to (dmin - 1) errors**
+- **Correct up to t = ⌊(dmin - 1)/2⌋ errors**
+- Example: dmin = 5 → detect 4 errors OR correct 2 errors
+
+---
+
+### Hamming Code ⭐ (EXAM FAVORITE)
+
+**Structure of (n, k) Hamming Code**
+- Check bits placed at positions 2^i (positions 1, 2, 4, 8, 16...)
+- Data bits fill remaining positions
+- Each check bit covers specific positions based on binary representation
+- **n = 2^r - 1, k = n - r** (for standard Hamming code)
+
+**Check Bit Coverage** (position has 1 in binary representation at that power of 2)
+- **Position 1 (p₁)**: covers positions 1,3,5,7,9,11,13,15... (odd positions)
+- **Position 2 (p₂)**: covers positions 2,3,6,7,10,11,14,15...
+- **Position 4 (p₄)**: covers positions 4,5,6,7,12,13,14,15...
+- **Position 8 (p₈)**: covers positions 8,9,10,11,12,13,14,15...
+
+**Syndrome Word Calculation**
+1. Calculate parity for each check bit group (including the check bit)
+2. Syndrome = [c₄c₃c₂c₁] in binary
+3. **Syndrome = 0**: No error detected
+4. **Syndrome ≠ 0**: Syndrome value = position of error bit
+
+**Example Calculation** (typical exam question):
+- Received: 1011010 (7-bit Hamming)
+- Check p₁: positions 1,3,5,7 → XOR = 1⊕1⊕0⊕0 = 0
+- Check p₂: positions 2,3,6,7 → XOR = 0⊕1⊕1⊕0 = 0
+- Check p₄: positions 4,5,6,7 → XOR = 1⊕0⊕1⊕0 = 0
+- Syndrome = 000 → No error
+
+**Hamming Code Properties**
+- dmin = 3 → corrects 1 error OR detects 2 errors
+- Cannot do both simultaneously
+- Extended Hamming (add overall parity) → dmin = 4, can detect 2 + correct 1
+
+---
+
+### LDPC Codes (Low-Density Parity-Check)
+
+**Key Characteristics**
+- Sparse parity-check matrix H (mostly zeros)
+- Represented by **Tanner graph** (bipartite: variable nodes ↔ check nodes)
+- **Iterative decoding**: Message passing between nodes
+- Near Shannon limit performance
+
+**LDPC vs Hamming Code** (exam question)
+| Feature | Hamming | LDPC |
+|---------|---------|------|
+| Complexity | Simple | Complex |
+| Performance | Moderate | Near Shannon limit |
+| Decoding | Algebraic | Iterative |
+| Block length | Short | Long (thousands of bits) |
+| Applications | Memory ECC | 5G, WiFi, DVB |
+
+---
+
+### Polar Codes
+
+- Based on **channel polarization** concept
+- Recursive structure using "reverse shuffle"
+- Channels become either very reliable or very unreliable
+- Put data bits on reliable channels, frozen bits on unreliable
+- Used in **5G control channels**
+- **Successive cancellation decoding**
+
+---
+
+### Convolutional Codes (n, k, K)
+
+**Parameters**
+- **n**: Output bits per input
+- **k**: Input bits per step (usually 1)
+- **K**: Constraint length (memory + 1)
+- **Code rate R = k/n**
+
+**Key Concepts**
+- Encoder has **memory** (shift registers)
+- Output depends on current AND previous inputs
+- Represented by **state diagram** or **trellis diagram**
+
+**Viterbi Decoding**
+- Maximum likelihood decoding
+- Traces through trellis finding most probable path
+- Computes **Hamming distance** between received and expected
+- Keeps **survivor path** with minimum cumulative distance
+
+---
+
+### Turbo Codes
+
+**Structure**
+- Two **RSC (Recursive Systematic Convolutional)** encoders in parallel
+- **Interleaver** between encoders (scrambles bit order)
+- **Puncturing**: Remove some parity bits to increase rate
+
+**Decoding**
+- **Iterative decoding** between two decoders
+- Exchange **soft information** (LLR - Log Likelihood Ratios)
+- Multiple iterations improve performance
+- Near Shannon limit at reasonable complexity
+
+**Convolutional vs Turbo Codes** (exam comparison)
+| Feature | Convolutional | Turbo |
+|---------|---------------|-------|
+| Decoding | Viterbi (optimal) | Iterative (sub-optimal) |
+| Complexity | Moderate | Higher |
+| Performance | Good | Near Shannon limit |
+| Latency | Lower | Higher (iterations) |
+| Applications | Voice, older systems | 3G/4G data |
+
+---
+
+### Hybrid ARQ (HARQ)
+
+**Type-I HARQ**
+- FEC code always transmitted
+- If decoding fails → request retransmission
+- Retransmitted frame is identical
+- Simple but less efficient
+
+**Type-II HARQ (Incremental Redundancy)**
+- First transmission: Systematic bits + some parity
+- If fails: Send **additional parity bits** (not identical copy)
+- Receiver **combines** all received bits
+- **Chase combining**: Same bits, soft combining
+- **Incremental redundancy**: Different parity bits each time
+- More efficient, used in LTE/5G
+
+---
+
+### Key Exam Formulas Summary
+
+| Formula | Meaning |
+|---------|---------|
+| P₂ = 1 - (1 - Pᵦ)^F | Frame error probability |
+| dmin - 1 | Max detectable errors |
+| t = ⌊(dmin-1)/2⌋ | Max correctable errors |
+| n = 2^r - 1 | Hamming code length |
+| R = k/n | Code rate |
+
+---
+
+### Practice Questions (Lecture 4)
+
+✓ **How do you calculate the syndrome word for Hamming code?** Calculate XOR of each parity group; syndrome gives error position in binary
+
+✓ **What is the difference between LDPC and Hamming codes?** LDPC: iterative decoding, long blocks, near Shannon limit; Hamming: algebraic, short blocks, simpler
+
+✓ **Compare convolutional codes vs turbo codes** Convolutional: Viterbi decoding, moderate complexity; Turbo: iterative decoding, near Shannon limit, higher latency
+
+✓ **When is FEC preferred over BEC?** High BER channels where retransmissions are costly (real-time, satellite, poor wireless)
+
+✓ **Explain Go-Back-N vs Selective Repeat** GBN: retransmit all from error; SR: only retransmit specific frame; SR more efficient but needs receiver buffering
+
+✓ **What is HARQ Type-II?** Combines FEC with ARQ; sends incremental redundancy on retransmission; receiver combines all for better decoding
 
 ---
 
